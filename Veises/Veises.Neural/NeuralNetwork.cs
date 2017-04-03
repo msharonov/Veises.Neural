@@ -1,31 +1,30 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Veises.Neural.Properties;
 
 namespace Veises.Neural
 {
 	public sealed class NeuralNetwork
 	{
-		private readonly IList<NeuronLayer> _neuronLayers;
+		private readonly IReadOnlyCollection<NeuronLayer> _neuronLayers;
 
-		public NeuralNetwork(int[] layerNeuronsCount)
-		{
-			_neuronLayers = new List<NeuronLayer>();
+		private const int MinimalLayersCount = 3;
 
-			CreateLayers(layerNeuronsCount);
-		}
+		public NeuralNetwork(IReadOnlyCollection<NeuronLayer> layers) =>
+			_neuronLayers = layers ?? throw new ArgumentNullException(nameof(layers));
 
-		private void CreateLayers(int[] layerNeuronCount)
+		public static NeuralNetwork Create(int[] layerNeuronCount)
 		{
 			if (layerNeuronCount == null)
 				throw new ArgumentNullException(nameof(layerNeuronCount));
 
-			if (layerNeuronCount.Length < 3)
+			if (layerNeuronCount.Length < MinimalLayersCount)
 				throw new ArgumentException(
-					$"Neuron layers count can not be less than 3, but found {layerNeuronCount.Length}.",
+					$"Neuron layers count can not be less than {MinimalLayersCount}, but found {layerNeuronCount.Length}.",
 					nameof(layerNeuronCount));
 
-			_neuronLayers.Clear();
+			var layers = new List<NeuronLayer>();
 
 			for (var layerNumber = 0; layerNumber < layerNeuronCount.Length; layerNumber++)
 			{
@@ -38,41 +37,43 @@ namespace Veises.Neural
 
 				var layer = NeuronLayer.Create(layerType, layerNeuronCount[layerNumber]);
 
-				_neuronLayers.Add(layer);
+				layers.Add(layer);
 
 				if (layerNumber > 0)
 				{
-					var previousLayer = _neuronLayers[layerNumber - 1];
+					var previousLayer = layers[layerNumber - 1];
 
 					Axon.Create(previousLayer, layer);
 				}
 			}
+
+			return new NeuralNetwork(layers);
 		}
 
 		public double[] GetOutputs(params double[] inputs)
 		{
-			_neuronLayers[0].SetInputs(inputs);
+			_neuronLayers.First().SetInputs(inputs);
 
-			for (var i = 1; i < _neuronLayers.Count; i++)
+			foreach (var layer in _neuronLayers.Skip(1))
 			{
-				_neuronLayers[i].CalculateOutputs();
+				layer.CalculateOutputs();
 			}
 
-			return _neuronLayers[_neuronLayers.Count - 1].Outputs;
+			return _neuronLayers.Last().Outputs;
 		}
 
 		public void Learn(params double[] expectedOutputs)
 		{
-			_neuronLayers[_neuronLayers.Count - 1].SetExpectedOutputs(expectedOutputs);
+			_neuronLayers.Last().SetExpectedOutputs(expectedOutputs);
 
-			for (var i = _neuronLayers.Count - 2; i > 0; i--)
+			foreach (var layer in _neuronLayers.Reverse().Skip(1))
 			{
-				_neuronLayers[i].BackpropagateError();
+				layer.BackpropagateError();
 			}
 
-			for (var i = 0; i < (_neuronLayers.Count - 1); i++)
+			foreach (var layer in _neuronLayers)
 			{
-				_neuronLayers[i].AdjustWeights();
+				layer.AdjustWeights();
 			}
 		}
 
