@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("Veises.Recurrent")]
+[assembly: AssemblyTitle("Veises.Neural")]
 [assembly: AssemblyDescription("")]
-[assembly: Guid("0fedc416-04a9-42c3-a5b7-bdd73c785ab4")]
+[assembly: Guid("b250ab9c-52e0-4c1a-9327-54f09df17df1")]
