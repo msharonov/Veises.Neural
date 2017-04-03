@@ -5,7 +5,7 @@ namespace Veises.Recurrent.Tests
 	[TestClass]
 	public sealed class RecurrentNetworkTest
 	{
-		private RecurrentNetwork _recurrentNetwork;
+		private RecurrentNetworkOld _recurrentNetwork;
 
 		[TestMethod]
 		public void ShouldComputeOutputs()
@@ -17,7 +17,7 @@ namespace Veises.Recurrent.Tests
 			var seed = 0;
 
 			// recurrent network 2-3-2
-			_recurrentNetwork = new RecurrentNetwork(numInput, numHidden, numOutput, seed);
+			_recurrentNetwork = new RecurrentNetworkOld(numInput, numHidden, numOutput, seed);
 
 			var wts = new double[] {
 				0.01, 0.02, 0.03, 0.04, 0.05, 0.06,

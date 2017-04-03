@@ -2,7 +2,7 @@
 
 namespace Veises.Recurrent
 {
-	public class RecurrentNetwork
+	public class RecurrentNetworkOld
 	{
 		private int numInput;
 		private int numHidden;
@@ -23,7 +23,7 @@ namespace Veises.Recurrent
 		private double[] outputs;
 		private Random rnd;
 
-		public RecurrentNetwork(int numInput, int numHidden,
+		public RecurrentNetworkOld(int numInput, int numHidden,
 		  int numOutput, int seed)
 		{
 			this.numInput = numInput;

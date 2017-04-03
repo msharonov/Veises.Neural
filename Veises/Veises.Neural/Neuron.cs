@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Veises.Recurrent
+namespace Veises.Neural
 {
 	public sealed class Neuron
 	{
@@ -19,7 +19,7 @@ namespace Veises.Recurrent
 			_inputAxons = new List<Axon>();
 		}
 
-		public void AddChild(Axon axon)
+		public void AddOutput(Axon axon)
 		{
 			if (axon == null)
 				throw new ArgumentNullException(nameof(axon));
@@ -27,7 +27,7 @@ namespace Veises.Recurrent
 			_outputAxons.Add(axon);
 		}
 
-		public void AddParent(Axon axon)
+		public void AddInput(Axon axon)
 		{
 			if (axon == null)
 				throw new ArgumentNullException(nameof(axon));
@@ -61,6 +61,28 @@ namespace Veises.Recurrent
 			{
 				axon.AdjustWeight();
 			}
+		}
+
+		public void CalculateError()
+		{
+			var weightErrorSum = 0d;
+
+			foreach (var axon in _outputAxons)
+			{
+				weightErrorSum += axon.WeightedError;
+			}
+
+			CalculateError(weightErrorSum);
+		}
+
+		public void CalculateError(double errorTerm) => Error = errorTerm * (Output * (1 - Output));
+
+		public void SetInput(double input)
+		{
+			if (_inputAxons.Count > 0)
+				throw new ArgumentException(nameof(input));
+
+			Output = input;
 		}
 	}
 }

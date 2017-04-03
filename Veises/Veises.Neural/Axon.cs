@@ -1,7 +1,7 @@
 ﻿using System;
-using Veises.Recurrent.Properties;
+using Veises.Neural.Properties;
 
-namespace Veises.Recurrent
+namespace Veises.Neural
 {
 	public sealed class Axon
 	{
@@ -10,6 +10,8 @@ namespace Veises.Recurrent
 		private readonly Neuron _outputNeuron;
 
 		public double Weight { get; private set; }
+
+		public double WeightedError => _outputNeuron.Error * Weight;
 
 		private double _delta { get; set; }
 
@@ -44,11 +46,27 @@ namespace Veises.Recurrent
 
 			var axon = new Axon(input, output);
 
-			input.AddChild(axon);
+			input.AddOutput(axon);
 
-			output.AddParent(axon);
+			output.AddInput(axon);
 
 			return axon;
+		}
+
+		public static void Create(NeuronLayer inputLayer, NeuronLayer outputLayer)
+		{
+			if (inputLayer == null)
+				throw new ArgumentNullException(nameof(inputLayer));
+			if (outputLayer == null)
+				throw new ArgumentNullException(nameof(outputLayer));
+
+			foreach (var parentNexon in inputLayer.Neurons)
+			{
+				foreach (var childNexon in outputLayer.Neurons)
+				{
+					Axon.Create(parentNexon, childNexon);
+				}
+			}
 		}
 	}
 }
