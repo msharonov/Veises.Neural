@@ -61,7 +61,7 @@ namespace Veises.Neural.Tests
 		[SetUp]
 		public void SetUp()
 		{
-			_target = new NeuralNetwork(new[] { 15, 50, 50, 3 });
+			_target = NeuralNetwork.Create(new[] { 15, 50, 50, 3 });
 
 			var learnCases = new[]
 			{
