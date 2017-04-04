@@ -10,7 +10,7 @@ namespace Veises.Neural
 
 		public NeuronLayerType LayerType { get; set; }
 
-		public double[] Outputs => Neurons.Select(_ => _.Output).ToArray();
+		public IEnumerable<double> Outputs => Neurons.Select(_ => _.Output).ToArray();
 
 		public NeuronLayer(NeuronLayerType layerType, IEnumerable<Neuron> neurons)
 		{
@@ -18,15 +18,14 @@ namespace Veises.Neural
 				throw new ArgumentNullException(nameof(neurons));
 
 			Neurons = neurons.ToList();
-
 			LayerType = layerType;
 		}
 
 		public void AdjustWeights()
 		{
-			foreach (var perceptron in Neurons)
+			foreach (var neuron in Neurons)
 			{
-				perceptron.AdjustWeights();
+				neuron.AdjustWeights();
 			}
 		}
 
@@ -49,11 +48,11 @@ namespace Veises.Neural
 		public static NeuronLayer Create(NeuronLayerType layerType, int neuronsCount)
 		{
 			if (neuronsCount < 1)
-				throw new ArgumentException("Layer neurons count can not be less than 1");
+				throw new ArgumentException("Layer neurons count can not be less than 1.");
 
 			var neurons = Enumerable
 				.Range(0, neuronsCount)
-				.Select(_ => new Neuron());
+				.Select(_ => new Neuron(new SigmoidFunction()));
 
 			return new NeuronLayer(layerType, neurons);
 		}

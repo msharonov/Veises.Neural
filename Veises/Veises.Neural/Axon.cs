@@ -17,14 +17,12 @@ namespace Veises.Neural
 
 		private static readonly Random Rand = new Random();
 
-		public double WeightedOutput => _inputNeuron.Output * Weight;
-
 		public Axon(Neuron parent, Neuron child)
 		{
 			_inputNeuron = parent ?? throw new ArgumentNullException(nameof(parent));
 			_outputNeuron = child ?? throw new ArgumentNullException(nameof(child));
 
-			Weight = Rand.NextDouble() - 0.5;
+			Weight = Rand.NextDouble() - 0.5d;
 		}
 
 		public void AdjustWeight()
@@ -68,5 +66,7 @@ namespace Veises.Neural
 				}
 			}
 		}
+
+		public double GetOutput() => _inputNeuron.Output * Weight;
 	}
 }

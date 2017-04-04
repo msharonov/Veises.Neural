@@ -50,7 +50,7 @@ namespace Veises.Neural
 			return new NeuralNetwork(layers);
 		}
 
-		public double[] GetOutputs(params double[] inputs)
+		public IEnumerable<double> GetOutputs(params double[] inputs)
 		{
 			_neuronLayers.First().SetInputs(inputs);
 
@@ -88,7 +88,7 @@ namespace Veises.Neural
 
 				foreach (var learnCase in learnCases)
 				{
-					var outputs = GetOutputs(learnCase.Input);
+					var outputs = GetOutputs(learnCase.Input).ToList();
 
 					var isExpectedEqualsOutput = true;
 
