@@ -45,7 +45,7 @@ namespace Veises.Neural.Perceptron
 			return new BinaryPerceptron(inputs);
 		}
 
-		private static int GetNextWeight() => _random.Next(0, 1);
+		private static double GetNextWeight() => _random.NextDouble();
 
 		public double CalculateOutput()
 		{

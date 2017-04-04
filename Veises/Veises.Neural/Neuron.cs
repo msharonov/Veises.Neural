@@ -11,7 +11,7 @@ namespace Veises.Neural
 
 		private readonly IList<Axon> _inputAxons;
 
-		public readonly Bias Bias;
+		private readonly Bias _layerBias;
 
 		public double Error { get; private set; }
 
@@ -20,7 +20,7 @@ namespace Veises.Neural
 		public Neuron(IActivationFunction activationFunction, Bias bias)
 		{
 			_activationFunction = activationFunction ?? throw new ArgumentNullException(nameof(activationFunction));
-			Bias = bias ?? throw new ArgumentNullException(nameof(bias));
+			_layerBias = bias ?? throw new ArgumentNullException(nameof(bias));
 
 			_outputAxons = new List<Axon>();
 			_inputAxons = new List<Axon>();
@@ -42,7 +42,7 @@ namespace Veises.Neural
 			_inputAxons.Add(axon);
 		}
 
-		public double CalculateOutput()
+		public void CalculateOutput()
 		{
 			var inputSum = 0d;
 
@@ -51,17 +51,9 @@ namespace Veises.Neural
 				inputSum += axon.GetOutput();
 			}
 
-			inputSum += Bias.Value;
+			inputSum += _layerBias.Weight;
 
-			return Output = _activationFunction.Activate(inputSum, Bias.Value);
-		}
-
-		public void SetOutput(double output)
-		{
-			if (_inputAxons.Count > 0d)
-				throw new ArgumentException(nameof(output));
-
-			Output = output;
+			Output = _activationFunction.Activate(inputSum);
 		}
 
 		public void AdjustWeights()
@@ -89,7 +81,7 @@ namespace Veises.Neural
 		public void SetInput(double input)
 		{
 			if (_inputAxons.Count > 0)
-				throw new ArgumentException(nameof(input));
+				throw new ArgumentException("Input value can not be set for a non-input layer neurons.");
 
 			Output = input;
 		}
