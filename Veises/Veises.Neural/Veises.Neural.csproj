@@ -44,6 +44,7 @@
       <Link>Properties\AssemblyInfoGlobal.cs</Link>
     </Compile>
     <Compile Include="Axon.cs" />
+    <Compile Include="Bias.cs" />
     <Compile Include="IActivationFunction.cs" />
     <Compile Include="IStepFunction.cs" />
     <Compile Include="Perceptron\BinaryPerceptron.cs" />

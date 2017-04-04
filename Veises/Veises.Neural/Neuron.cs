@@ -11,20 +11,19 @@ namespace Veises.Neural
 
 		private readonly IList<Axon> _inputAxons;
 
-		public double Bias { get; set; } = 1.0d;
+		public readonly Bias Bias;
 
 		public double Error { get; private set; }
 
 		public double Output { get; private set; }
 
-		public Neuron(IActivationFunction activationFunction, double bias = 1.0d)
+		public Neuron(IActivationFunction activationFunction, Bias bias)
 		{
 			_activationFunction = activationFunction ?? throw new ArgumentNullException(nameof(activationFunction));
+			Bias = bias ?? throw new ArgumentNullException(nameof(bias));
 
 			_outputAxons = new List<Axon>();
 			_inputAxons = new List<Axon>();
-
-			Bias = bias;
 		}
 
 		public void AddOutput(Axon axon)
@@ -52,9 +51,9 @@ namespace Veises.Neural
 				inputSum += axon.GetOutput();
 			}
 
-			inputSum += Bias;
+			inputSum += Bias.Value;
 
-			return Output = _activationFunction.Activate(inputSum, Bias);
+			return Output = _activationFunction.Activate(inputSum, Bias.Value);
 		}
 
 		public void SetOutput(double output)

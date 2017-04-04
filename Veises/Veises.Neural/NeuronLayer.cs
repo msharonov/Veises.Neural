@@ -8,14 +8,18 @@ namespace Veises.Neural
 	{
 		public readonly IList<Neuron> Neurons;
 
+		private readonly Bias _bias;
+
 		public NeuronLayerType LayerType { get; set; }
 
 		public IEnumerable<double> Outputs => Neurons.Select(_ => _.Output).ToArray();
 
-		public NeuronLayer(NeuronLayerType layerType, IEnumerable<Neuron> neurons)
+		public NeuronLayer(NeuronLayerType layerType, IEnumerable<Neuron> neurons, Bias bias)
 		{
 			if (neurons == null)
 				throw new ArgumentNullException(nameof(neurons));
+
+			_bias = bias ?? throw new ArgumentNullException(nameof(bias));
 
 			Neurons = neurons.ToList();
 			LayerType = layerType;
@@ -50,11 +54,13 @@ namespace Veises.Neural
 			if (neuronsCount < 1)
 				throw new ArgumentException("Layer neurons count can not be less than 1.");
 
+			var bias = new Bias();
+
 			var neurons = Enumerable
 				.Range(0, neuronsCount)
-				.Select(_ => new Neuron(new SigmoidFunction()));
+				.Select(_ => new Neuron(new SigmoidFunction(), bias));
 
-			return new NeuronLayer(layerType, neurons);
+			return new NeuronLayer(layerType, neurons, bias);
 		}
 
 		public void SetExpectedOutputs(double[] expectedOutputs)
