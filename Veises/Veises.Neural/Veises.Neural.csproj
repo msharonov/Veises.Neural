@@ -44,11 +44,15 @@
       <Link>Properties\AssemblyInfoGlobal.cs</Link>
     </Compile>
     <Compile Include="Axon.cs" />
+    <Compile Include="Perceptron\BinaryPerceptron.cs" />
+    <Compile Include="Perceptron\IPerceptronInput.cs" />
     <Compile Include="NetworkLearnCase.cs" />
     <Compile Include="NeuralNetwork.cs" />
     <Compile Include="Neuron.cs" />
     <Compile Include="NeuronLayer.cs" />
     <Compile Include="NeuronLayerType.cs" />
+    <Compile Include="Perceptron\PerceptronBiasInput.cs" />
+    <Compile Include="Perceptron\PerceptronInput.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
