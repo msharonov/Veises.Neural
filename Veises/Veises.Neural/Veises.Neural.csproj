@@ -44,6 +44,8 @@
       <Link>Properties\AssemblyInfoGlobal.cs</Link>
     </Compile>
     <Compile Include="Axon.cs" />
+    <Compile Include="IActivationFunction.cs" />
+    <Compile Include="IStepFunction.cs" />
     <Compile Include="Perceptron\BinaryPerceptron.cs" />
     <Compile Include="Perceptron\IPerceptronInput.cs" />
     <Compile Include="NetworkLearnCase.cs" />
@@ -59,6 +61,7 @@
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
+    <Compile Include="SigmoidFunction.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

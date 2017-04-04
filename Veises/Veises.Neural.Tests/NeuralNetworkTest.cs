@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using FluentAssertions;
+using System.Linq;
 
 namespace Veises.Neural.Tests
 {
@@ -76,7 +77,7 @@ namespace Veises.Neural.Tests
 		[TestCaseSource(nameof(TestCases))]
 		public void ShouldRecognizeSymbolsViaNet(double[] input, double[] output)
 		{
-			var result = _target.GetOutputs(input);
+			var result = _target.GetOutputs(input).ToArray();
 
 			for (var i = 0; i < output.Length; i++)
 			{
