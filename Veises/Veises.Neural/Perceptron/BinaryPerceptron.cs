@@ -8,7 +8,9 @@ namespace Veises.Neural.Perceptron
 	{
 		public readonly IReadOnlyCollection<IPerceptronInput> Inputs;
 
-		public Func<double, double> ActivationFunc = _ => _ > Settings.Default.ActivationThreshold ? 1 : 0;
+		public Func<double, double> ActivationFunc = _ => _ > 0.0d ? 1 : 0;
+
+		private static Random _random = new Random();
 
 		public BinaryPerceptron(IReadOnlyCollection<IPerceptronInput> inputs)
 		{
@@ -20,13 +22,11 @@ namespace Veises.Neural.Perceptron
 			if (inputsCount < 1)
 				throw new ArgumentException("Inputs count can't be less than 1");
 
-			var random = new Random();
-
 			var inputs = new List<IPerceptronInput>();
 
 			for (var i = 0; i < inputsCount; i++)
 			{
-				var inputWeight = random.Next(-1, 1);
+				var inputWeight = GetNextWeight();
 
 				var input = new PerceptronInput(inputWeight);
 
@@ -35,7 +35,7 @@ namespace Veises.Neural.Perceptron
 
 			if (addBias)
 			{
-				var biasInputWeight = random.Next(-1, 1);
+				var biasInputWeight = GetNextWeight();
 
 				var biasInput = new PerceptronBiasInput(biasInputWeight);
 
@@ -44,6 +44,8 @@ namespace Veises.Neural.Perceptron
 
 			return new BinaryPerceptron(inputs);
 		}
+
+		private static int GetNextWeight() => _random.Next(0, 1);
 
 		public double CalculateOutput()
 		{
