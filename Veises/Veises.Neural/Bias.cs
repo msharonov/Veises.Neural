@@ -4,18 +4,18 @@ namespace Veises.Neural
 {
 	public sealed class Bias
 	{
-		public readonly double Value;
+		public readonly double Weight;
 
 		private static Random _random = new Random();
 
-		public Bias() : this(_random.Next(0, 1))
+		public Bias() : this(_random.NextDouble())
 		{
 
 		}
 
 		public Bias(double value)
 		{
-			Value = value;
+			Weight = value;
 		}
 	}
 }

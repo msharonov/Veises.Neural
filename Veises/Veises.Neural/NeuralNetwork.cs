@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Veises.Neural.Properties;
 
@@ -62,6 +63,17 @@ namespace Veises.Neural
 			return _neuronLayers.Last().Outputs;
 		}
 
+		public double GetGlobalError(double[] inputs, double[] desiredOutputs)
+		{
+			var outputs = GetOutputs(inputs);
+
+			var outputSum = outputs.Sum();
+
+			var desiredOutputsSum = desiredOutputs.Sum();
+
+			return desiredOutputsSum - outputSum;
+		}
+
 		public void Learn(params double[] expectedOutputs)
 		{
 			_neuronLayers.Last().SetExpectedOutputs(expectedOutputs);
@@ -77,10 +89,12 @@ namespace Veises.Neural
 			}
 		}
 
-		public void Learn(NetworkLearnCase[] learnCases)
+		public void Learn(params NetworkLearnCase[] learnCases)
 		{
 			if (learnCases == null)
 				throw new ArgumentNullException(nameof(learnCases));
+
+			var iterationCount = 1;
 
 			while (true)
 			{
@@ -112,7 +126,11 @@ namespace Veises.Neural
 
 				if (requireRepeatLearn == false)
 					break;
+
+				iterationCount++;
 			}
+
+			Debug.WriteLine($"Learn iterations total count: {iterationCount}");
 		}
 	}
 }

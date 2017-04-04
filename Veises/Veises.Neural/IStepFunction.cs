@@ -2,9 +2,8 @@
 
 namespace Veises.Neural
 {
-	public sealed class IStepFunction: IActivationFunction
+	public sealed class StepFunction: IActivationFunction
 	{
-		public double Activate(double sum, double bias)
-			=> sum > 0 ? 1d : 0d;
+		public double Activate(double sum) => sum > 0 ? 1d : 0d;
 	}
 }

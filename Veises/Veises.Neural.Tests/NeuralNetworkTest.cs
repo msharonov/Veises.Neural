@@ -64,14 +64,10 @@ namespace Veises.Neural.Tests
 		{
 			_target = NeuralNetwork.Create(new[] { 15, 50, 50, 3 });
 
-			var learnCases = new[]
-			{
+			_target.Learn(
 				new NetworkLearnCase(OneInput, OneOutput),
 				new NetworkLearnCase(FourInput, FourOutput),
-				new NetworkLearnCase(FiveInput, FiveOutput)
-			};
-
-			_target.Learn(learnCases);
+				new NetworkLearnCase(FiveInput, FiveOutput));
 		}
 
 		[TestCaseSource(nameof(TestCases))]
@@ -81,10 +77,10 @@ namespace Veises.Neural.Tests
 
 			for (var i = 0; i < output.Length; i++)
 			{
-				Math.Abs(output[i] - result[i])
-					.Should()
-					.BeLessOrEqualTo(0.1d);
+				output[i].Should().BeApproximately(result[i], 0.05d);
 			}
+
+			var globalError = _target.GetGlobalError(input, output);
 		}
 	}
 }

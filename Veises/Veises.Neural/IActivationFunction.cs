@@ -2,6 +2,6 @@
 {
 	public interface IActivationFunction
 	{
-		double Activate(double sum, double bias);
+		double Activate(double sum);
 	}
 }

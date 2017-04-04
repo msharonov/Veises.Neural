@@ -15,14 +15,14 @@ namespace Veises.Neural
 
 		private double _delta { get; set; }
 
-		private static readonly Random Rand = new Random();
+		private static readonly Random _random = new Random();
 
 		public Axon(Neuron parent, Neuron child)
 		{
 			_inputNeuron = parent ?? throw new ArgumentNullException(nameof(parent));
 			_outputNeuron = child ?? throw new ArgumentNullException(nameof(child));
 
-			Weight = Rand.NextDouble() - 0.5d;
+			Weight = _random.NextDouble() - 0.5d;
 		}
 
 		public void AdjustWeight()
