@@ -49,5 +49,14 @@ namespace Veises.Neural.Properties {
                 return ((double)(this["LearningTestAcceptance"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0.5")]
+        public double ActivationThreshold {
+            get {
+                return ((double)(this["ActivationThreshold"]));
+            }
+        }
     }
 }
