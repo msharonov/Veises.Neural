@@ -41,18 +41,20 @@ namespace Veises.Neural.Perceptron
 
 			var inputs = new List<IPerceptronInput>();
 
+			var inputErrorFunction = new DeltaFunction();
+
 			for (var i = 0; i < inputsCount; i++)
 			{
 				var inputWeight = GetNextWeight();
 
-				var input = new PerceptronInput(inputWeight);
+				var input = new PerceptronInput(inputWeight, inputErrorFunction);
 
 				inputs.Add(input);
 			}
 
 			var biasInputWeight = 1d;
 
-			var biasInput = new PerceptronBiasInput(biasInputWeight);
+			var biasInput = new PerceptronBiasInput(biasInputWeight, inputErrorFunction);
 
 			inputs.Add(biasInput);
 
@@ -73,11 +75,11 @@ namespace Veises.Neural.Perceptron
 			return _activationFunction.Activate(sum);
 		}
 
-		public void AdjustWeights(double globalError)
+		public void AdjustWeights(double desiredOutput)
 		{
 			foreach (var input in Inputs)
 			{
-				input.AdjustWeight(globalError);
+				input.AdjustWeight(desiredOutput);
 			}
 		}
 
@@ -85,7 +87,7 @@ namespace Veises.Neural.Perceptron
 		{
 			var output = CalculateOutput();
 
-			var globalError = desiredOutput - output;
+			var globalError = _errorFunction.Calculate(output, desiredOutput);
 
 			Debug.WriteLine($"Global error: {globalError}");
 
@@ -98,7 +100,7 @@ namespace Veises.Neural.Perceptron
 
 			while (Math.Abs(globalError) > Settings.Default.LearningTestAcceptance)
 			{
-				AdjustWeights(globalError);
+				AdjustWeights(desiredOutput);
 
 				globalError = GetGlobalError(desiredOutput);
 			}

@@ -1,4 +1,5 @@
-﻿using Veises.Neural.Properties;
+﻿using System;
+using Veises.Neural.Properties;
 
 namespace Veises.Neural.Perceptron
 {
@@ -8,8 +9,12 @@ namespace Veises.Neural.Perceptron
 
 		public double Weight { get; private set; }
 
-		public PerceptronBiasInput(double weight)
+		private readonly IErrorFunction _errorFunction;
+
+		public PerceptronBiasInput(double weight, IErrorFunction errorFunction)
 		{
+			_errorFunction = errorFunction ?? throw new ArgumentNullException(nameof(errorFunction));
+
 			Weight = weight;
 		}
 
@@ -19,7 +24,7 @@ namespace Veises.Neural.Perceptron
 		{
 			var localOutput = CalculateOutput();
 
-			var localError = desiredOutput - localOutput;
+			var localError = _errorFunction.Calculate(localOutput, desiredOutput);
 
 			Weight += Settings.Default.LearningRate * localError * Bias;
 		}
