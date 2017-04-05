@@ -62,7 +62,7 @@ namespace Veises.Neural.Tests
 		[SetUp]
 		public void SetUp()
 		{
-			_target = NeuralNetwork.Create(new[] { 15, 50, 50, 3 });
+			_target = NeuralNetwork.Create(new[] { 15, 50, 50, 3 }, new ErrorFunction());
 
 			_target.Learn(
 				new NetworkLearnCase(OneInput, OneOutput),
@@ -79,8 +79,6 @@ namespace Veises.Neural.Tests
 			{
 				output[i].Should().BeApproximately(result[i], 0.05d);
 			}
-
-			var globalError = _target.GetGlobalError(input, output);
 		}
 	}
 }

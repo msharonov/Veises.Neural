@@ -4,7 +4,7 @@ namespace Veises.Neural.Perceptron
 {
 	public sealed class PerceptronBiasInput: IPerceptronInput
 	{
-		public const double Bias = 1.0d;
+		public const double Bias = 1d;
 
 		public double Weight { get; private set; }
 
@@ -15,7 +15,13 @@ namespace Veises.Neural.Perceptron
 
 		public double CalculateOutput() => Bias * Weight;
 
-		public void AdjustWeight(double localError) =>
+		public void AdjustWeight(double desiredOutput)
+		{
+			var localOutput = CalculateOutput();
+
+			var localError = desiredOutput - localOutput;
+
 			Weight += Settings.Default.LearningRate * localError * Bias;
+		}
 	}
 }
