@@ -9,10 +9,13 @@ namespace Veises.Neural.Perceptron
 
 		public double Weight { get; private set; }
 
-		public PerceptronInput(double weight, double input = 0d)
+		private readonly IErrorFunction _errorFunction;
+
+		public PerceptronInput(double weight, IErrorFunction errorFunction)
 		{
+			_errorFunction = errorFunction ?? throw new ArgumentNullException(nameof(errorFunction));
+
 			Weight = weight;
-			Input = input;
 		}
 
 		public double CalculateOutput() => GetInputValue() * Weight;
@@ -32,7 +35,7 @@ namespace Veises.Neural.Perceptron
 		{
 			var localOutut = CalculateOutput();
 
-			var localError = desiredOutput - localOutut;
+			var localError = _errorFunction.Calculate(localOutut, desiredOutput);
 
 			Weight += Settings.Default.LearningRate * localError * GetInputValue();
 		}

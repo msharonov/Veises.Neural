@@ -16,13 +16,13 @@ namespace Veises.Neural
 
 		public double GlobalError { get; private set; }
 
-		public NeuralNetwork(IReadOnlyCollection<NeuronLayer> layers, ErrorFunction errorFunction)
+		public NeuralNetwork(IReadOnlyCollection<NeuronLayer> layers, IErrorFunction errorFunction)
 		{
 			_neuronLayers = layers ?? throw new ArgumentNullException(nameof(layers));
 			_errorFunction = errorFunction ?? throw new ArgumentNullException(nameof(errorFunction));
 		}
 
-		public static NeuralNetwork Create(int[] layerNeuronCount, ErrorFunction errorFunction)
+		public static NeuralNetwork Create(int[] layerNeuronCount, IErrorFunction errorFunction)
 		{
 			if (layerNeuronCount == null)
 				throw new ArgumentNullException(nameof(layerNeuronCount));
