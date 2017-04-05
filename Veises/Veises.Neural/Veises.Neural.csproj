@@ -46,7 +46,8 @@
     <Compile Include="Axon.cs" />
     <Compile Include="Bias.cs" />
     <Compile Include="IActivationFunction.cs" />
-    <Compile Include="IStepFunction.cs" />
+    <Compile Include="IErrorFunction.cs" />
+    <Compile Include="INeuralNetworkTrainer.cs" />
     <Compile Include="Perceptron\BinaryPerceptron.cs" />
     <Compile Include="Perceptron\IPerceptronInput.cs" />
     <Compile Include="NetworkLearnCase.cs" />
@@ -63,6 +64,8 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="SigmoidFunction.cs" />
+    <Compile Include="StepFunction.cs" />
+    <Compile Include="SymmetricalSigmoidFunction.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Veises.Neural.Properties;
 
 namespace Veises.Neural.Perceptron
@@ -8,19 +9,35 @@ namespace Veises.Neural.Perceptron
 	{
 		public readonly IReadOnlyCollection<IPerceptronInput> Inputs;
 
-		public Func<double, double> ActivationFunc = _ => _ > 0.0d ? 1 : 0;
+		private readonly IActivationFunction _activationFunction;
+
+		private readonly IErrorFunction _errorFunction;
 
 		private static Random _random = new Random();
 
-		public BinaryPerceptron(IReadOnlyCollection<IPerceptronInput> inputs)
+		public BinaryPerceptron(
+			IReadOnlyCollection<IPerceptronInput> inputs,
+			IActivationFunction activationFunction,
+			IErrorFunction errorFunction)
 		{
 			Inputs = inputs ?? throw new ArgumentNullException(nameof(inputs));
+			_activationFunction = activationFunction ?? throw new ArgumentNullException(nameof(activationFunction));
+			_errorFunction = errorFunction ?? throw new ArgumentNullException(nameof(errorFunction));
 		}
 
-		public static BinaryPerceptron Create(int inputsCount, bool addBias = true)
+		public static BinaryPerceptron Create(
+			int inputsCount,
+			IActivationFunction activationFunction,
+			IErrorFunction errorFunction)
 		{
-			if (inputsCount < 1)
+			if (inputsCount < 1d)
 				throw new ArgumentException("Inputs count can't be less than 1");
+
+			if (activationFunction == null)
+				throw new ArgumentNullException(nameof(activationFunction));
+
+			if (errorFunction == null)
+				throw new ArgumentNullException(nameof(errorFunction));
 
 			var inputs = new List<IPerceptronInput>();
 
@@ -33,60 +50,57 @@ namespace Veises.Neural.Perceptron
 				inputs.Add(input);
 			}
 
-			if (addBias)
-			{
-				var biasInputWeight = GetNextWeight();
+			var biasInputWeight = 1d;
 
-				var biasInput = new PerceptronBiasInput(biasInputWeight);
+			var biasInput = new PerceptronBiasInput(biasInputWeight);
 
-				inputs.Add(biasInput);
-			}
+			inputs.Add(biasInput);
 
-			return new BinaryPerceptron(inputs);
+			return new BinaryPerceptron(inputs, activationFunction, errorFunction);
 		}
 
 		private static double GetNextWeight() => _random.NextDouble();
 
 		public double CalculateOutput()
 		{
-			var sum = .0d;
+			var sum = 0d;
 
 			foreach (var input in Inputs)
 			{
 				sum += input.CalculateOutput();
 			}
 
-			return ActivationFunc.Invoke(sum);
+			return _activationFunction.Activate(sum);
 		}
 
-		private double GetLocalError(double desiredOutput)
+		public void AdjustWeights(double globalError)
+		{
+			foreach (var input in Inputs)
+			{
+				input.AdjustWeight(globalError);
+			}
+		}
+
+		public double GetGlobalError(double desiredOutput)
 		{
 			var output = CalculateOutput();
 
-			var localError = desiredOutput - output;
+			var globalError = desiredOutput - output;
 
-			return localError;
-		}
+			Debug.WriteLine($"Global error: {globalError}");
 
-		public void AdjustWeights(double desiredOutput)
-		{
-			var localError = GetLocalError(desiredOutput);
-
-			foreach (var input in Inputs)
-			{
-				input.AdjustWeight(localError);
-			}
+			return globalError;
 		}
 
 		public void Learn(double desiredOutput)
 		{
-			var localError = 1.0d;
+			var globalError = GetGlobalError(desiredOutput);
 
-			while (localError > Settings.Default.LearningTestAcceptance)
+			while (Math.Abs(globalError) > Settings.Default.LearningTestAcceptance)
 			{
-				AdjustWeights(desiredOutput);
+				AdjustWeights(globalError);
 
-				localError = GetLocalError(desiredOutput);
+				globalError = GetGlobalError(desiredOutput);
 			}
 		}
 

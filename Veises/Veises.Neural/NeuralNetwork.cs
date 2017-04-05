@@ -10,15 +10,25 @@ namespace Veises.Neural
 	{
 		private readonly IReadOnlyCollection<NeuronLayer> _neuronLayers;
 
+		private readonly IErrorFunction _errorFunction;
+
 		private const int MinimalLayersCount = 3;
 
-		public NeuralNetwork(IReadOnlyCollection<NeuronLayer> layers) =>
-			_neuronLayers = layers ?? throw new ArgumentNullException(nameof(layers));
+		public double GlobalError { get; private set; }
 
-		public static NeuralNetwork Create(int[] layerNeuronCount)
+		public NeuralNetwork(IReadOnlyCollection<NeuronLayer> layers, ErrorFunction errorFunction)
+		{
+			_neuronLayers = layers ?? throw new ArgumentNullException(nameof(layers));
+			_errorFunction = errorFunction ?? throw new ArgumentNullException(nameof(errorFunction));
+		}
+
+		public static NeuralNetwork Create(int[] layerNeuronCount, ErrorFunction errorFunction)
 		{
 			if (layerNeuronCount == null)
 				throw new ArgumentNullException(nameof(layerNeuronCount));
+
+			if (errorFunction == null)
+				throw new ArgumentNullException(nameof(errorFunction));
 
 			if (layerNeuronCount.Length < MinimalLayersCount)
 				throw new ArgumentException(
@@ -48,7 +58,7 @@ namespace Veises.Neural
 				}
 			}
 
-			return new NeuralNetwork(layers);
+			return new NeuralNetwork(layers, errorFunction);
 		}
 
 		public IEnumerable<double> GetOutputs(params double[] inputs)
@@ -71,7 +81,7 @@ namespace Veises.Neural
 
 			var desiredOutputsSum = desiredOutputs.Sum();
 
-			return desiredOutputsSum - outputSum;
+			return GlobalError = _errorFunction.Calculate(outputSum, desiredOutputsSum);
 		}
 
 		public void Learn(params double[] expectedOutputs)

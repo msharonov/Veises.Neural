@@ -28,25 +28,28 @@ namespace Veises.Neural.Tests.Perceptron
 		[Test]
 		public void ShouldRecognizeDigit()
 		{
-			var perceptron = BinaryPerceptron.Create(15);
+			var perceptron = BinaryPerceptron.Create(
+				15,
+				new StepFunction(0d),
+				new ErrorFunction());
 
 			perceptron.Load(Three);
 
-			perceptron.Learn(1);
+			perceptron.Learn(1d);
 
 			perceptron.Load(Four);
 
-			perceptron.Learn(0);
+			perceptron.Learn(0d);
 
 			var result = perceptron.CalculateOutput();
 
-			result.ShouldBeEquivalentTo(0);
+			result.ShouldBeEquivalentTo(0d);
 
 			perceptron.Load(Three);
 
 			result = perceptron.CalculateOutput();
 
-			result.ShouldBeEquivalentTo(1);
+			result.ShouldBeEquivalentTo(1d);
 		}
 	}
 }
