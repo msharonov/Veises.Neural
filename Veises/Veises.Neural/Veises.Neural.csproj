@@ -50,7 +50,11 @@
     <Compile Include="GlobalErrorFunction.cs" />
     <Compile Include="IActivationFunction.cs" />
     <Compile Include="IErrorFunction.cs" />
+    <Compile Include="INeuralNetwork.cs" />
+    <Compile Include="INeuralNetworkBuilder.cs" />
     <Compile Include="INeuralNetworkTrainer.cs" />
+    <Compile Include="NeuralNetworkBuilder.cs" />
+    <Compile Include="NeuralNetworkTrainer.cs" />
     <Compile Include="Perceptron\BinaryPerceptron.cs" />
     <Compile Include="Perceptron\IPerceptronInput.cs" />
     <Compile Include="NetworkLearnCase.cs" />
