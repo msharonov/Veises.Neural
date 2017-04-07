@@ -62,7 +62,9 @@ namespace Veises.Neural.Tests
 		[SetUp]
 		public void SetUp()
 		{
-			var neuralNetworkBuilder = new NeuralNetworkBuilder();
+			var neuronBuilder = new NeuronBuilder(new SigmoidFunction());
+			var neuralNetworkLayerBuilder = new NeuronLayerBuilder(neuronBuilder);
+			var neuralNetworkBuilder = new NeuralNetworkBuilder(neuralNetworkLayerBuilder);
 
 			_target = neuralNetworkBuilder.Build(new[] { 15, 50, 50, 3 }, new GlobalErrorFunction());
 

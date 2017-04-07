@@ -49,20 +49,6 @@ namespace Veises.Neural
 			}
 		}
 
-		public static NeuronLayer Create(NeuronLayerType layerType, int neuronsCount)
-		{
-			if (neuronsCount < 1)
-				throw new ArgumentException("Layer neurons count can not be less than 1.");
-
-			var bias = new Bias();
-
-			var neurons = Enumerable
-				.Range(0, neuronsCount)
-				.Select(_ => new Neuron(new SigmoidFunction(), bias));
-
-			return new NeuronLayer(layerType, neurons, bias);
-		}
-
 		public void SetExpectedOutputs(double[] expectedOutputs)
 		{
 			if (expectedOutputs == null)
