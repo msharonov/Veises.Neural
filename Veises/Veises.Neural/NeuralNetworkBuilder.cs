@@ -8,6 +8,13 @@ namespace Veises.Neural
 	{
 		private const int MinimalLayersCount = 3;
 
+		private readonly INeuronLayerBuilder _neuronLayerBuilder;
+
+		public NeuralNetworkBuilder(INeuronLayerBuilder neuronLayerBuilder)
+		{
+			_neuronLayerBuilder = neuronLayerBuilder ?? throw new ArgumentNullException(nameof(neuronLayerBuilder));
+		}
+
 		public NeuralNetwork Build(int[] layerNeuronsCount, IErrorFunction errorFunction)
 		{
 			if (layerNeuronsCount == null)
@@ -32,7 +39,7 @@ namespace Veises.Neural
 				else if (layerNumber == layerNeuronsCount.Length - 1)
 					layerType = NeuronLayerType.Output;
 
-				var layer = NeuronLayer.Create(layerType, layerNeuronsCount[layerNumber]);
+				var layer = _neuronLayerBuilder.Build(layerType, layerNeuronsCount[layerNumber]);
 
 				layers.Add(layer);
 

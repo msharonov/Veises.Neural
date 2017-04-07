@@ -53,8 +53,12 @@
     <Compile Include="INeuralNetwork.cs" />
     <Compile Include="INeuralNetworkBuilder.cs" />
     <Compile Include="INeuralNetworkTrainer.cs" />
+    <Compile Include="INeuronBuilder.cs" />
+    <Compile Include="INeuronLayerBuilder.cs" />
     <Compile Include="NeuralNetworkBuilder.cs" />
     <Compile Include="NeuralNetworkTrainer.cs" />
+    <Compile Include="NeuronBuilder.cs" />
+    <Compile Include="NeuronLayerBuilder.cs" />
     <Compile Include="Perceptron\BinaryPerceptron.cs" />
     <Compile Include="Perceptron\IPerceptronInput.cs" />
     <Compile Include="NetworkLearnCase.cs" />
