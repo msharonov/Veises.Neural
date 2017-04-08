@@ -5,7 +5,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyCompany("Veises")]
 [assembly: AssemblyProduct("Veises.Neural")]
 [assembly: AssemblyCopyright("Copyright © Veises 2017")]
-[assembly: AssemblyTrademark("")]
+[assembly: AssemblyTrademark("Copyright © Veises 2017")]
 [assembly: AssemblyCulture("")]
 
 [assembly: ComVisible(false)]
