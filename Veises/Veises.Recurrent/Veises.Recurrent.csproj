@@ -52,6 +52,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RecurrentNetwork.cs" />
     <Compile Include="RecurrentNetworkOld.cs" />
+    <Compile Include="RecurrentNeuron.cs" />
+    <Compile Include="TanhActivationFunction.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

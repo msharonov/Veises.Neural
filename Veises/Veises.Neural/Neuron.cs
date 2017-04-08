@@ -3,24 +3,24 @@ using System.Collections.Generic;
 
 namespace Veises.Neural
 {
-	public sealed class Neuron
+	public class Neuron
 	{
-		private readonly IActivationFunction _activationFunction;
+		protected readonly IActivationFunction _activationFunction;
 
-		private readonly IList<Axon> _outputAxons;
+		protected readonly IList<Axon> _outputAxons;
 
-		private readonly IList<Axon> _inputAxons;
+		protected readonly IList<Axon> _inputAxons;
 
-		private readonly Bias _layerBias;
+		protected readonly Bias _bias;
 
-		public double Error { get; private set; }
+		public double Error { get; protected set; }
 
-		public double Output { get; private set; }
+		public double Output { get; protected set; }
 
 		public Neuron(IActivationFunction activationFunction, Bias bias)
 		{
 			_activationFunction = activationFunction ?? throw new ArgumentNullException(nameof(activationFunction));
-			_layerBias = bias ?? throw new ArgumentNullException(nameof(bias));
+			_bias = bias ?? throw new ArgumentNullException(nameof(bias));
 
 			_outputAxons = new List<Axon>();
 			_inputAxons = new List<Axon>();
@@ -42,7 +42,7 @@ namespace Veises.Neural
 			_inputAxons.Add(axon);
 		}
 
-		public void CalculateOutput()
+		public virtual void CalculateOutput()
 		{
 			var inputSum = 0d;
 
@@ -51,7 +51,7 @@ namespace Veises.Neural
 				inputSum += axon.GetOutput();
 			}
 
-			inputSum += _layerBias.Weight;
+			inputSum += _bias.Weight;
 
 			Output = _activationFunction.Activate(inputSum);
 		}
