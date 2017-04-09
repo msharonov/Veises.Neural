@@ -5,11 +5,11 @@ using Veises.Neural.Properties;
 
 namespace Veises.Neural
 {
-	public sealed class NeuralNetworkTrainer: INeuralNetworkTrainer<NeuralNetwork>
+	public sealed class NeuralNetworkTrainer: INeuralNetworkTrainer
 	{
 		private INeuralNetwork _neuralNetwork;
 
-		public void Load(NeuralNetwork neuralNetwork) =>
+		public void Load(INeuralNetwork neuralNetwork) =>
 			_neuralNetwork = neuralNetwork ?? throw new ArgumentNullException(nameof(neuralNetwork));
 
 		public void Train(params NetworkLearnCase[] learningCases)

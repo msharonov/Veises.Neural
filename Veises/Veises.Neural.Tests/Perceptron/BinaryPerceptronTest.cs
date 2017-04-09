@@ -31,7 +31,7 @@ namespace Veises.Neural.Tests.Perceptron
 			var perceptron = BinaryPerceptron.Create(
 				15,
 				new StepFunction(0.5d),
-				new GlobalErrorFunction());
+				new SummerSquaredErrorFunction());
 
 			perceptron.Load(Three);
 

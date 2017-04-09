@@ -8,7 +8,7 @@ namespace Veises.Neural.Tests
 	[TestFixture]
 	public class NeuralNetworkTest
 	{
-		private NeuralNetwork _target;
+		private INeuralNetwork _target;
 
 		private static readonly double[] OneInput =
 		{
@@ -63,10 +63,10 @@ namespace Veises.Neural.Tests
 		public void SetUp()
 		{
 			var neuronBuilder = new NeuronBuilder(new SigmoidFunction());
-			var neuralNetworkLayerBuilder = new NeuronLayerBuilder(neuronBuilder);
+			var neuralNetworkLayerBuilder = new NeuralNetworkLayerBuilder(neuronBuilder);
 			var neuralNetworkBuilder = new NeuralNetworkBuilder(neuralNetworkLayerBuilder);
 
-			_target = neuralNetworkBuilder.Build(new[] { 15, 50, 50, 3 }, new GlobalErrorFunction());
+			_target = neuralNetworkBuilder.Build(new[] { 15, 50, 50, 3 });
 
 			var networkTrainer = new NeuralNetworkTrainer();
 

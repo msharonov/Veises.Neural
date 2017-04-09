@@ -4,7 +4,7 @@ namespace Veises.Neural
 {
 	public interface INeuralNetwork
 	{
-		IReadOnlyCollection<NeuronLayer> NeuronLayers { get; }
+		IReadOnlyCollection<INeuralNetworkLayer> NeuronLayers { get; }
 
 		double GetGlobalError(double[] inputs, double[] desiredOutputs);
 

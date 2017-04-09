@@ -2,6 +2,6 @@
 {
 	public interface INeuronBuilder
 	{
-		Neuron Build(Bias bias);
+		NeuralNetworkNeuron Build(Bias bias);
 	}
 }

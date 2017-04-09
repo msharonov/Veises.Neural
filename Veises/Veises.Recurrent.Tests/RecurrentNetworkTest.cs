@@ -3,7 +3,7 @@
 namespace Veises.Recurrent.Tests
 {
 	[TestClass]
-	public sealed class RecurrentNetworkTest
+	public sealed class RecurrentNetworkOldTest
 	{
 		private RecurrentNetworkOld _recurrentNetwork;
 
