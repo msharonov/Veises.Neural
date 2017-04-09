@@ -38,6 +38,7 @@ namespace Veises.Neural
 
 			var desiredOutputsSum = desiredOutputs.Sum();
 
+			// TODO: corrent function 0.5d * Sum(pow(input[i] - output[i], 2))
 			return GlobalError = _errorFunction.Calculate(outputSum, desiredOutputsSum);
 		}
 	}

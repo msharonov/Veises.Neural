@@ -11,7 +11,7 @@ namespace Veises.Recurrent.Tests
 		[TestInitialize]
 		public void SetUp()
 		{
-			var neuronBuilder = new NeuronBuilder(new TanhActivationFunction());
+			var neuronBuilder = new NeuronBuilder(new SigmoidFunction());
 			var neuralNetworkLayerBuilder = new NeuralNetworkLayerBuilder(neuronBuilder);
 			var recurrentNeuronNetworkBuilder = new NeuralNetworkBuilder(neuralNetworkLayerBuilder);
 

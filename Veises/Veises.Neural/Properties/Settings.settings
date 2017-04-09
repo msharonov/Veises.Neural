@@ -3,7 +3,7 @@
   <Profiles />
   <Settings>
     <Setting Name="LearningRate" Type="System.Double" Scope="Application">
-      <Value Profile="(Default)">0.2</Value>
+      <Value Profile="(Default)">0.1</Value>
     </Setting>
     <Setting Name="Momentum" Type="System.Double" Scope="Application">
       <Value Profile="(Default)">0.8</Value>
@@ -13,6 +13,9 @@
     </Setting>
     <Setting Name="InputThreshold" Type="System.Double" Scope="Application">
       <Value Profile="(Default)">0.5</Value>
+    </Setting>
+    <Setting Name="MaxLearningEpochsCount" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">1000</Value>
     </Setting>
   </Settings>
 </SettingsFile>

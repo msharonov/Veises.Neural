@@ -75,34 +75,47 @@ namespace Veises.Neural.Perceptron
 			return _activationFunction.Activate(sum);
 		}
 
-		public void AdjustWeights(double desiredOutput)
+		public void AdjustWeights(double error)
 		{
 			foreach (var input in Inputs)
 			{
-				input.AdjustWeight(desiredOutput);
+				input.AdjustWeight(error);
 			}
 		}
 
-		public double GetGlobalError(double desiredOutput)
+		public double GetError(double desiredOutput)
 		{
 			var output = CalculateOutput();
 
-			var globalError = _errorFunction.Calculate(output, desiredOutput);
+			var sumActivation = _activationFunction.Deactivate(output);
 
-			Debug.WriteLine($"Global error: {globalError}");
+			var error = (desiredOutput - output) * sumActivation;
 
-			return globalError;
+			Debug.WriteLine($"Error value: {error}");
+
+			return error;
 		}
 
 		public void Learn(double desiredOutput)
 		{
-			var globalError = GetGlobalError(desiredOutput);
+			var globalError = _errorFunction.Calculate(CalculateOutput(), desiredOutput);
 
-			while (Math.Abs(globalError) > Settings.Default.LearningTestAcceptance)
+			var epochCount = 0;
+
+			while (globalError > Settings.Default.LearningTestAcceptance &&
+				epochCount < Settings.Default.MaxLearningEpochsCount)
 			{
-				AdjustWeights(desiredOutput);
+				Debug.WriteLine($"Global error: {globalError}");
 
-				globalError = GetGlobalError(desiredOutput);
+				var error = GetError(desiredOutput);
+
+				AdjustWeights(error);
+
+				globalError = _errorFunction.Calculate(CalculateOutput(), desiredOutput);
+
+				Debug.WriteLine($"Learn epoch {epochCount} is done");
+
+				epochCount++;
 			}
 		}
 

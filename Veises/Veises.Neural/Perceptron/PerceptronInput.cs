@@ -31,13 +31,7 @@ namespace Veises.Neural.Perceptron
 		private double GetInputValue() =>
 			Input > Settings.Default.InputThreshold ? 1d : 0d;
 
-		public void AdjustWeight(double desiredOutput)
-		{
-			var localOutut = CalculateOutput();
-
-			var localError = _errorFunction.Calculate(localOutut, desiredOutput);
-
-			Weight += Settings.Default.LearningRate * localError * GetInputValue();
-		}
+		public void AdjustWeight(double error) =>
+			Weight += Settings.Default.LearningRate * error * Input;
 	}
 }

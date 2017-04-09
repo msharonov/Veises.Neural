@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyProduct("Veises.Neural")]
 [assembly: AssemblyCopyright("Copyright © Veises 2017")]
 [assembly: AssemblyTrademark("Copyright © Veises 2017")]
-[assembly: AssemblyCulture("en-en")]
+[assembly: AssemblyCulture("")]
 
 [assembly: ComVisible(false)]
 
