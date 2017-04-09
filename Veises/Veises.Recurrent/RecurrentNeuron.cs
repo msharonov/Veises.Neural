@@ -1,37 +1,61 @@
-﻿using Veises.Neural;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Veises.Neural;
 
 namespace Veises.Recurrent
 {
-	public sealed class RecurrentNeuron: Neuron
+	public sealed class RecurrentNeuron: NeuralNetworkNeuron
 	{
-		private readonly Axon _contextAxon;
+		private readonly IReadOnlyCollection<INeuralNetworkAxon> _layerContextAxons;
+		private readonly INeuralNetworkAxon _outContextAxon;
 
-		private readonly Neuron _contextNeuron;
-
-		public RecurrentNeuron(IActivationFunction activationFunction, Bias bias)
+		public RecurrentNeuron(
+			IReadOnlyCollection<INeuralNetworkNeuron> layerContextNeurons,
+			INeuralNetworkNeuron outContextNeuron,
+			IActivationFunction activationFunction,
+			Bias bias)
 			: base(activationFunction, bias)
 		{
-			_contextNeuron = new Neuron(activationFunction, bias);
+			if (layerContextNeurons == null)
+				throw new ArgumentNullException(nameof(layerContextNeurons));
 
-			_contextAxon = new Axon(_contextNeuron, this);
+			if (outContextNeuron == null)
+				throw new ArgumentNullException(nameof(outContextNeuron));
+
+			_layerContextAxons = BuildAxonsForLayerContextNeurons(layerContextNeurons);
+
+			_outContextAxon = new NeuralnetworkStaticAxon(this, outContextNeuron);
+		}
+
+		private List<INeuralNetworkAxon> BuildAxonsForLayerContextNeurons(IReadOnlyCollection<INeuralNetworkNeuron> layerContextNeurons)
+		{
+			var layerContextAxons = new List<INeuralNetworkAxon>();
+
+			foreach (var contextNeuron in layerContextNeurons)
+			{
+				layerContextAxons.Add(new NeuralNetworkAxon(contextNeuron, this));
+			}
+
+			return layerContextAxons;
 		}
 
 		public override void CalculateOutput()
 		{
 			var inputSum = 0d;
 
-			foreach (var axon in _inputAxons)
+			foreach (var inputAxon in _inputAxons)
 			{
-				inputSum += axon.GetOutput();
+				inputSum += inputAxon.GetOutput();
 			}
 
 			inputSum += _bias.Weight;
 
-			inputSum += _contextAxon.GetOutput();
+			inputSum += _layerContextAxons.Sum(_ => _.GetOutput());
 
 			Output = _activationFunction.Activate(inputSum);
 
-			_contextNeuron.SetInput(Output);
+			_outContextAxon.GetOutputNeuron().SetInput(Output);
 		}
 	}
 }

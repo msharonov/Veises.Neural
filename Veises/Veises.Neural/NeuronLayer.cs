@@ -4,17 +4,34 @@ using System.Linq;
 
 namespace Veises.Neural
 {
-	public sealed class NeuronLayer
+	public interface INeuralNetworkLayer
 	{
-		public readonly IList<Neuron> Neurons;
+		void AdjustWeights();
+
+		void BackpropagateError();
+
+		void CalculateOutputs();
+
+		IReadOnlyCollection<double> GetOutputs();
+
+		IReadOnlyCollection<NeuralNetworkNeuron> GetNeurons();
+
+		void SetExpectedOutputs(double[] expectedOutputs);
+
+		void SetInputs(double[] inputs);
+	}
+
+	public sealed class NeuronLayer: INeuralNetworkLayer
+	{
+		public readonly IList<NeuralNetworkNeuron> Neurons;
 
 		private readonly Bias _bias;
 
 		public NeuronLayerType LayerType { get; set; }
 
-		public IEnumerable<double> Outputs => Neurons.Select(_ => _.Output).ToArray();
 
-		public NeuronLayer(NeuronLayerType layerType, IEnumerable<Neuron> neurons, Bias bias)
+
+		public NeuronLayer(NeuronLayerType layerType, IEnumerable<NeuralNetworkNeuron> neurons, Bias bias)
 		{
 			if (neurons == null)
 				throw new ArgumentNullException(nameof(neurons));
@@ -48,6 +65,15 @@ namespace Veises.Neural
 				perceptron.CalculateOutput();
 			}
 		}
+
+		public IReadOnlyCollection<double> GetOutputs() =>
+			Neurons
+				.Select(_ => _.Output)
+				.ToArray();
+
+		public IReadOnlyCollection<NeuralNetworkNeuron> GetNeurons() =>
+			Neurons
+				.ToArray();
 
 		public void SetExpectedOutputs(double[] expectedOutputs)
 		{

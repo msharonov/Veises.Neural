@@ -3,19 +3,21 @@ using System.Linq;
 
 namespace Veises.Neural
 {
-	public sealed class NeuronLayerBuilder: INeuronLayerBuilder
+	public sealed class NeuralNetworkLayerBuilder: INeuralNetworkLayerBuilder
 	{
 		private readonly INeuronBuilder _neuronBuilder;
 
-		public NeuronLayerBuilder(INeuronBuilder neuronBuilder)
+		private const int LayerMinimalNeuronsCount = 1;
+
+		public NeuralNetworkLayerBuilder(INeuronBuilder neuronBuilder)
 		{
 			_neuronBuilder = neuronBuilder ?? throw new ArgumentNullException(nameof(neuronBuilder));
 		}
 
-		public NeuronLayer Build(NeuronLayerType layerType, int neuronsCount)
+		public INeuralNetworkLayer Build(NeuronLayerType layerType, int neuronsCount)
 		{
-			if (neuronsCount < 1)
-				throw new ArgumentException("Layer neurons count can not be less than 1.");
+			if (neuronsCount < LayerMinimalNeuronsCount)
+				throw new ArgumentException($"Layer neurons count can not be less than {LayerMinimalNeuronsCount}.");
 
 			var layerBias = new Bias();
 

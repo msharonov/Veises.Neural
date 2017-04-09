@@ -3,13 +3,13 @@ using System.Collections.Generic;
 
 namespace Veises.Neural
 {
-	public class Neuron
+	public class NeuralNetworkNeuron: INeuralNetworkNeuron
 	{
 		protected readonly IActivationFunction _activationFunction;
 
-		protected readonly IList<Axon> _outputAxons;
+		protected readonly IList<INeuralNetworkAxon> _outputAxons;
 
-		protected readonly IList<Axon> _inputAxons;
+		protected readonly IList<INeuralNetworkAxon> _inputAxons;
 
 		protected readonly Bias _bias;
 
@@ -17,16 +17,16 @@ namespace Veises.Neural
 
 		public double Output { get; protected set; }
 
-		public Neuron(IActivationFunction activationFunction, Bias bias)
+		public NeuralNetworkNeuron(IActivationFunction activationFunction, Bias bias)
 		{
 			_activationFunction = activationFunction ?? throw new ArgumentNullException(nameof(activationFunction));
 			_bias = bias ?? throw new ArgumentNullException(nameof(bias));
 
-			_outputAxons = new List<Axon>();
-			_inputAxons = new List<Axon>();
+			_outputAxons = new List<INeuralNetworkAxon>();
+			_inputAxons = new List<INeuralNetworkAxon>();
 		}
 
-		public void AddOutput(Axon axon)
+		public void AddOutput(INeuralNetworkAxon axon)
 		{
 			if (axon == null)
 				throw new ArgumentNullException(nameof(axon));
@@ -34,7 +34,7 @@ namespace Veises.Neural
 			_outputAxons.Add(axon);
 		}
 
-		public void AddInput(Axon axon)
+		public void AddInput(INeuralNetworkAxon axon)
 		{
 			if (axon == null)
 				throw new ArgumentNullException(nameof(axon));

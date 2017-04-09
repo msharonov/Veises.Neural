@@ -11,12 +11,12 @@ namespace Veises.Neural
 			_activationFunction = activationFunction ?? throw new ArgumentNullException(nameof(activationFunction));
 		}
 
-		public Neuron Build(Bias layerBias)
+		public NeuralNetworkNeuron Build(Bias layerBias)
 		{
 			if (layerBias == null)
 				throw new ArgumentNullException(nameof(layerBias));
 
-			return new Neuron(_activationFunction, layerBias);
+			return new NeuralNetworkNeuron(_activationFunction, layerBias);
 		}
 	}
 }

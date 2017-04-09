@@ -1,9 +1,8 @@
 ﻿namespace Veises.Neural
 {
-	public interface INeuralNetworkTrainer<T>
-		where T : class, INeuralNetwork
+	public interface INeuralNetworkTrainer
 	{
-		void Load(T neuralNetwork);
+		void Load(INeuralNetwork neuralNetwork);
 
 		void Train(params NetworkLearnCase[] learningCases);
 	}

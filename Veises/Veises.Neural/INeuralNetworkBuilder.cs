@@ -1,8 +1,7 @@
 ﻿namespace Veises.Neural
 {
-	public interface INeuralNetworkBuilder<T>
-		where T : class, INeuralNetwork
+	public interface INeuralNetworkBuilder
 	{
-		T Build(int[] layerNeuronsCount, IErrorFunction errorFunction);
+		INeuralNetwork Build(int[] layerNeuronsCount);
 	}
 }

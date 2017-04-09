@@ -4,31 +4,28 @@ using System.Diagnostics;
 
 namespace Veises.Neural
 {
-	public sealed class NeuralNetworkBuilder: INeuralNetworkBuilder<NeuralNetwork>
+	public sealed class NeuralNetworkBuilder: INeuralNetworkBuilder
 	{
 		private const int MinimalLayersCount = 3;
 
-		private readonly INeuronLayerBuilder _neuronLayerBuilder;
+		private readonly INeuralNetworkLayerBuilder _neuronLayerBuilder;
 
-		public NeuralNetworkBuilder(INeuronLayerBuilder neuronLayerBuilder)
+		public NeuralNetworkBuilder(INeuralNetworkLayerBuilder neuronLayerBuilder)
 		{
 			_neuronLayerBuilder = neuronLayerBuilder ?? throw new ArgumentNullException(nameof(neuronLayerBuilder));
 		}
 
-		public NeuralNetwork Build(int[] layerNeuronsCount, IErrorFunction errorFunction)
+		public INeuralNetwork Build(int[] layerNeuronsCount)
 		{
 			if (layerNeuronsCount == null)
 				throw new ArgumentNullException(nameof(layerNeuronsCount));
-
-			if (errorFunction == null)
-				throw new ArgumentNullException(nameof(errorFunction));
 
 			if (layerNeuronsCount.Length < MinimalLayersCount)
 				throw new ArgumentException(
 					$"Neuron layers count can not be less than {MinimalLayersCount}, but found {layerNeuronsCount.Length}.",
 					nameof(layerNeuronsCount));
 
-			var layers = new List<NeuronLayer>();
+			var layers = new List<INeuralNetworkLayer>();
 
 			for (var layerNumber = 0; layerNumber < layerNeuronsCount.Length; layerNumber++)
 			{
@@ -47,13 +44,15 @@ namespace Veises.Neural
 				{
 					var previousLayer = layers[layerNumber - 1];
 
-					Axon.Create(previousLayer, layer);
+					NeuralNetworkAxon.Create(previousLayer, layer);
 				}
 
 				Debug.WriteLine($"Neuron {layerType} layer {layerNumber + 1} created");
 			}
 
-			return new NeuralNetwork(layers, errorFunction);
+			var globalErrorFunction = new SummerSquaredErrorFunction();
+
+			return new NeuralNetwork(layers, globalErrorFunction);
 		}
 	}
 }

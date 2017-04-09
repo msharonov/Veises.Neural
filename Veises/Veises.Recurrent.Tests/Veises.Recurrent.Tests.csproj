@@ -54,11 +54,16 @@
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="RecurrentNetworkTest.cs" />
+    <Compile Include="RecurrentNeuralNetworkTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Veises.Neural\Veises.Neural.csproj">
+      <Project>{B250AB9C-52E0-4C1A-9327-54F09DF17DF1}</Project>
+      <Name>Veises.Neural</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Veises.Recurrent\Veises.Recurrent.csproj">
       <Project>{0fedc416-04a9-42c3-a5b7-bdd73c785ab4}</Project>
       <Name>Veises.Recurrent</Name>

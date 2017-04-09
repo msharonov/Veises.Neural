@@ -3,29 +3,27 @@ using Veises.Neural.Properties;
 
 namespace Veises.Neural
 {
-	public sealed class Axon
+	public class NeuralNetworkAxon: INeuralNetworkAxon
 	{
-		private readonly Neuron _inputNeuron;
+		private readonly INeuralNetworkNeuron _inputNeuron;
 
-		private readonly Neuron _outputNeuron;
+		private readonly INeuralNetworkNeuron _outputNeuron;
 
-		public double Weight { get; private set; }
+		public virtual double Weight { get; protected set; } = _random.NextDouble() - 0.5d;
 
-		public double WeightedError => _outputNeuron.Error * Weight;
+		public virtual double WeightedError => _outputNeuron.Error * Weight;
 
 		private double _delta { get; set; }
 
 		private static readonly Random _random = new Random();
 
-		public Axon(Neuron parent, Neuron child)
+		public NeuralNetworkAxon(INeuralNetworkNeuron parent, INeuralNetworkNeuron child)
 		{
 			_inputNeuron = parent ?? throw new ArgumentNullException(nameof(parent));
 			_outputNeuron = child ?? throw new ArgumentNullException(nameof(child));
-
-			Weight = _random.NextDouble() - 0.5d;
 		}
 
-		public void AdjustWeight()
+		public virtual void AdjustWeight()
 		{
 			_delta = Settings.Default.LearningRate
 				* _outputNeuron.Error
@@ -35,14 +33,14 @@ namespace Veises.Neural
 			Weight += _delta;
 		}
 
-		public static Axon Create(Neuron input, Neuron output)
+		public static INeuralNetworkAxon Create(INeuralNetworkNeuron input, INeuralNetworkNeuron output)
 		{
 			if (input == null)
 				throw new ArgumentNullException(nameof(input));
 			if (output == null)
 				throw new ArgumentNullException(nameof(output));
 
-			var axon = new Axon(input, output);
+			var axon = new NeuralNetworkAxon(input, output);
 
 			input.AddOutput(axon);
 
@@ -51,22 +49,27 @@ namespace Veises.Neural
 			return axon;
 		}
 
-		public static void Create(NeuronLayer inputLayer, NeuronLayer outputLayer)
+		public static void Create(INeuralNetworkLayer inputLayer, INeuralNetworkLayer outputLayer)
 		{
 			if (inputLayer == null)
 				throw new ArgumentNullException(nameof(inputLayer));
+
 			if (outputLayer == null)
 				throw new ArgumentNullException(nameof(outputLayer));
 
-			foreach (var parentNexon in inputLayer.Neurons)
+			foreach (var parentNexon in inputLayer.GetNeurons())
 			{
-				foreach (var childNexon in outputLayer.Neurons)
+				foreach (var childNexon in outputLayer.GetNeurons())
 				{
-					Axon.Create(parentNexon, childNexon);
+					Create(parentNexon, childNexon);
 				}
 			}
 		}
 
+		public INeuralNetworkNeuron GetInputNeuron() => _inputNeuron;
+
 		public double GetOutput() => _inputNeuron.Output * Weight;
+
+		public INeuralNetworkNeuron GetOutputNeuron() => _outputNeuron;
 	}
 }

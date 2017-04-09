@@ -6,13 +6,13 @@ namespace Veises.Neural
 {
 	public class NeuralNetwork: INeuralNetwork
 	{
-		public IReadOnlyCollection<NeuronLayer> NeuronLayers { get; private set; }
+		public IReadOnlyCollection<INeuralNetworkLayer> NeuronLayers { get; private set; }
 
 		private readonly IErrorFunction _errorFunction;
 
 		public double GlobalError { get; private set; }
 
-		public NeuralNetwork(IReadOnlyCollection<NeuronLayer> layers, IErrorFunction errorFunction)
+		public NeuralNetwork(IReadOnlyCollection<INeuralNetworkLayer> layers, IErrorFunction errorFunction)
 		{
 			NeuronLayers = layers ?? throw new ArgumentNullException(nameof(layers));
 			_errorFunction = errorFunction ?? throw new ArgumentNullException(nameof(errorFunction));
@@ -27,7 +27,7 @@ namespace Veises.Neural
 				layer.CalculateOutputs();
 			}
 
-			return NeuronLayers.Last().Outputs;
+			return NeuronLayers.Last().GetOutputs();
 		}
 
 		public double GetGlobalError(double[] inputs, double[] desiredOutputs)
