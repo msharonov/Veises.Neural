@@ -78,7 +78,7 @@ namespace Veises.Neural.Tests
 		}
 
 		[TestCaseSource(nameof(TestCases))]
-		public void ShouldRecognizeSymbolsViaNet(double[] input, double[] output)
+		public void ShouldRecognizeSymbol(double[] input, double[] output)
 		{
 			var result = _target.GetOutputs(input).ToArray();
 

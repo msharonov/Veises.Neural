@@ -30,8 +30,12 @@ namespace Veises.Neural.Tests.Perceptron
 		{
 			var perceptron = BinaryPerceptron.Create(
 				15,
-				new StepFunction(0.5d),
+				new SigmoidFunction(),
 				new SummerSquaredErrorFunction());
+
+			perceptron.Load(Four);
+
+			perceptron.Learn(0d);
 
 			perceptron.Load(Three);
 
@@ -39,17 +43,15 @@ namespace Veises.Neural.Tests.Perceptron
 
 			perceptron.Load(Four);
 
-			perceptron.Learn(0d);
-
 			var result = perceptron.CalculateOutput();
 
-			result.ShouldBeEquivalentTo(0d);
+			result.Should().BeLessThan(0.5d);
 
 			perceptron.Load(Three);
 
 			result = perceptron.CalculateOutput();
 
-			result.ShouldBeEquivalentTo(1d);
+			result.Should().BeGreaterOrEqualTo(0.5d);
 		}
 	}
 }

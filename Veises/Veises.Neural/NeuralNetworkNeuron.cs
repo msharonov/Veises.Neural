@@ -76,7 +76,8 @@ namespace Veises.Neural
 			CalculateError(weightErrorSum);
 		}
 
-		public void CalculateError(double errorTerm) => Error = errorTerm * (Output * (1 - Output));
+		public void CalculateError(double errorTerm) =>
+			Error = errorTerm * _activationFunction.Deactivate(Output);
 
 		public void SetInput(double input)
 		{
