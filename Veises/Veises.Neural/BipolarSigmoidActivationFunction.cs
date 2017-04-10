@@ -8,6 +8,6 @@ namespace Veises.Neural
 			(2d / (1d + Math.Exp(-sum))) - 1d;
 
 		public double Deactivate(double output) =>
-			0.5d * (1 + output) * (1 - output);
+			0.5d * (1 + Activate(output)) * (1 - Activate(output));
 	}
 }

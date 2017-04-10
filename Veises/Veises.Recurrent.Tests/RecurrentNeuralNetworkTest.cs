@@ -11,9 +11,11 @@ namespace Veises.Recurrent.Tests
 		[TestInitialize]
 		public void SetUp()
 		{
-			var neuronBuilder = new NeuronBuilder(new SigmoidFunction());
+			var activationFunction = new SigmoidFunction();
+
+			var neuronBuilder = new NeuronBuilder(activationFunction);
 			var neuralNetworkLayerBuilder = new NeuralNetworkLayerBuilder(neuronBuilder);
-			var recurrentNeuronNetworkBuilder = new NeuralNetworkBuilder(neuralNetworkLayerBuilder);
+			var recurrentNeuronNetworkBuilder = new NeuralNetworkBuilder(neuralNetworkLayerBuilder, activationFunction);
 
 			_recurrentNetwork = recurrentNeuronNetworkBuilder.Build(new[] { 1, 1, 1 });
 		}

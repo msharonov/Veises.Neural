@@ -10,9 +10,12 @@ namespace Veises.Neural
 
 		private readonly INeuralNetworkLayerBuilder _neuronLayerBuilder;
 
-		public NeuralNetworkBuilder(INeuralNetworkLayerBuilder neuronLayerBuilder)
+		private readonly IActivationFunction _activationFunction;
+
+		public NeuralNetworkBuilder(INeuralNetworkLayerBuilder neuronLayerBuilder, IActivationFunction activationFunction)
 		{
 			_neuronLayerBuilder = neuronLayerBuilder ?? throw new ArgumentNullException(nameof(neuronLayerBuilder));
+			_activationFunction = activationFunction ?? throw new ArgumentNullException(nameof(activationFunction));
 		}
 
 		public INeuralNetwork Build(int[] layerNeuronsCount)
@@ -50,9 +53,7 @@ namespace Veises.Neural
 				Debug.WriteLine($"Neuron {layerType} layer {layerNumber + 1} created");
 			}
 
-			var globalErrorFunction = new SummerSquaredErrorFunction();
-
-			return new NeuralNetwork(layers, globalErrorFunction);
+			return new NeuralNetwork(layers, _activationFunction);
 		}
 	}
 }

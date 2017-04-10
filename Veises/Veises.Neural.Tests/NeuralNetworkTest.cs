@@ -62,9 +62,11 @@ namespace Veises.Neural.Tests
 		[SetUp]
 		public void SetUp()
 		{
-			var neuronBuilder = new NeuronBuilder(new SigmoidFunction());
+			var activationFunction = new SigmoidFunction();
+
+			var neuronBuilder = new NeuronBuilder(activationFunction);
 			var neuralNetworkLayerBuilder = new NeuralNetworkLayerBuilder(neuronBuilder);
-			var neuralNetworkBuilder = new NeuralNetworkBuilder(neuralNetworkLayerBuilder);
+			var neuralNetworkBuilder = new NeuralNetworkBuilder(neuralNetworkLayerBuilder, activationFunction);
 
 			_target = neuralNetworkBuilder.Build(new[] { 15, 50, 50, 3 });
 
@@ -78,13 +80,15 @@ namespace Veises.Neural.Tests
 		}
 
 		[TestCaseSource(nameof(TestCases))]
-		public void ShouldRecognizeSymbol(double[] input, double[] output)
+		public void ShouldRecognizeSymbol(double[] inputValues, double[] outputValues)
 		{
-			var result = _target.GetOutputs(input).ToArray();
+			_target.SetInputs(inputValues);
 
-			for (var i = 0; i < output.Length; i++)
+			var result = _target.GetOutputs().ToArray();
+
+			for (var i = 0; i < outputValues.Length; i++)
 			{
-				output[i].Should().BeApproximately(result[i], 0.05d);
+				outputValues[i].Should().BeApproximately(result[i], 0.05d);
 			}
 		}
 	}
