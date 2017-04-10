@@ -52,12 +52,14 @@
     <Compile Include="INeuralNetwork.cs" />
     <Compile Include="INeuralNetworkAxon.cs" />
     <Compile Include="INeuralNetworkBuilder.cs" />
+    <Compile Include="INeuralNetworkLayer.cs" />
     <Compile Include="INeuralNetworkLayerBuilder.cs" />
     <Compile Include="INeuralNetworkNexon.cs" />
     <Compile Include="INeuralNetworkTrainer.cs" />
     <Compile Include="INeuronBuilder.cs" />
     <Compile Include="NeuralNetworkAxon.cs" />
     <Compile Include="NeuralNetworkBuilder.cs" />
+    <Compile Include="NeuralNetworkLayer.cs" />
     <Compile Include="NeuralNetworkLayerBuilder.cs" />
     <Compile Include="NeuralNetworkNeuron.cs" />
     <Compile Include="NeuralNetworkTrainer.cs" />
@@ -66,7 +68,6 @@
     <Compile Include="Perceptron\IPerceptronInput.cs" />
     <Compile Include="NetworkLearnCase.cs" />
     <Compile Include="NeuralNetwork.cs" />
-    <Compile Include="NeuronLayer.cs" />
     <Compile Include="NeuronLayerType.cs" />
     <Compile Include="Perceptron\PerceptronBiasInput.cs" />
     <Compile Include="Perceptron\PerceptronInput.cs" />

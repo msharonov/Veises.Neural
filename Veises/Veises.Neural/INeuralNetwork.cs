@@ -6,8 +6,12 @@ namespace Veises.Neural
 	{
 		IReadOnlyCollection<INeuralNetworkLayer> NeuronLayers { get; }
 
-		double GetGlobalError(double[] inputs, double[] desiredOutputs);
+		void Learn(params double[] desiredOutputs);
 
-		IEnumerable<double> GetOutputs(params double[] inputs);
+		double GetGlobalError(params double[] desiredOutputs);
+
+		IEnumerable<double> GetOutputs();
+
+		void SetInputs(params double[] inputValues);
 	}
 }

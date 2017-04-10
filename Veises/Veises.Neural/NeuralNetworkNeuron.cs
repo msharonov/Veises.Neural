@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Veises.Neural
 {
@@ -64,8 +65,28 @@ namespace Veises.Neural
 			}
 		}
 
+		public void CalculateError(double target)
+		{
+			if (_outputAxons.Count() > 0)
+				throw new ApplicationException("Can't calculate error for non-output layer neuron");
+
+			var dif = target - Output;
+
+			var errorSum = 0d;
+
+			foreach (var outputAxon in _outputAxons)
+			{
+				errorSum += outputAxon.WeightedError;
+			}
+
+			Error = dif * _activationFunction.Deactivate(errorSum);
+		}
+
 		public void CalculateError()
 		{
+			if (_outputAxons.Count() == 0)
+				throw new ApplicationException("Can't calculate error for output layer neuron");
+
 			var weightErrorSum = 0d;
 
 			foreach (var axon in _outputAxons)
@@ -73,18 +94,9 @@ namespace Veises.Neural
 				weightErrorSum += axon.WeightedError;
 			}
 
-			CalculateError(weightErrorSum);
+			Error = weightErrorSum * _activationFunction.Deactivate(Output);
 		}
 
-		public void CalculateError(double errorTerm) =>
-			Error = errorTerm * _activationFunction.Deactivate(Output);
-
-		public void SetInput(double input)
-		{
-			if (_inputAxons.Count > 0)
-				throw new ArgumentException("Input value can not be set for a non-input layer neurons.");
-
-			Output = input;
-		}
+		public void SetInput(double input) => Output = input;
 	}
 }

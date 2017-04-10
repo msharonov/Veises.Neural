@@ -9,13 +9,13 @@ namespace Veises.Neural
 
 		private readonly INeuralNetworkNeuron _outputNeuron;
 
-		public virtual double Weight { get; protected set; } = _random.NextDouble() - 0.5d;
+		public virtual double Weight { get; protected set; } = _random.NextDouble();
 
 		public virtual double WeightedError => _outputNeuron.Error * Weight;
 
-		private double _delta { get; set; }
-
 		private static readonly Random _random = new Random();
+
+		private double _delta = 0d;
 
 		public NeuralNetworkAxon(INeuralNetworkNeuron parent, INeuralNetworkNeuron child)
 		{

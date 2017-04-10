@@ -19,15 +19,17 @@ namespace Veises.Neural
 
 			var iterationCount = 1;
 
-			while (true)
+			do
 			{
-				var requireRepeatLearn = false;
+				var requireRepeat = false;
 
 				foreach (var learnCase in learningCases)
 				{
-					var outputs = _neuralNetwork.GetOutputs(learnCase.Input).ToList();
-
 					var isExpectedEqualsOutput = true;
+
+					_neuralNetwork.SetInputs(learnCase.Input);
+
+					var outputs = _neuralNetwork.GetOutputs().ToArray();
 
 					for (var i = 0; i < learnCase.Expected.Length; i++)
 					{
@@ -41,34 +43,20 @@ namespace Veises.Neural
 
 					if (!isExpectedEqualsOutput)
 					{
-						Train(learnCase.Expected);
+						_neuralNetwork.Learn(learnCase.Expected);
 
-						requireRepeatLearn = true;
+						requireRepeat = true;
 					}
 				}
 
-				if (requireRepeatLearn == false)
+				if (!requireRepeat)
 					break;
 
+				Debug.WriteLine($"Learn iterations total count: {iterationCount}");
+
 				iterationCount++;
-			}
 
-			Debug.WriteLine($"Learn iterations total count: {iterationCount}");
-		}
-
-		private void Train(params double[] expectedOutputs)
-		{
-			_neuralNetwork.NeuronLayers.Last().SetExpectedOutputs(expectedOutputs);
-
-			foreach (var layer in _neuralNetwork.NeuronLayers.Reverse().Skip(1))
-			{
-				layer.BackpropagateError();
-			}
-
-			foreach (var layer in _neuralNetwork.NeuronLayers)
-			{
-				layer.AdjustWeights();
-			}
+			} while (true);
 		}
 	}
 }

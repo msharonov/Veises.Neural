@@ -25,7 +25,7 @@ namespace Veises.Neural
 				.Range(0, neuronsCount)
 				.Select(_ => _neuronBuilder.Build(layerBias));
 
-			return new NeuronLayer(layerType, neurons, layerBias);
+			return new NeuralNetworkLayer(layerType, neurons, layerBias);
 		}
 	}
 }

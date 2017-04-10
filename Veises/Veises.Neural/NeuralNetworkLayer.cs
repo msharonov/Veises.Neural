@@ -4,34 +4,15 @@ using System.Linq;
 
 namespace Veises.Neural
 {
-	public interface INeuralNetworkLayer
-	{
-		void AdjustWeights();
-
-		void BackpropagateError();
-
-		void CalculateOutputs();
-
-		IReadOnlyCollection<double> GetOutputs();
-
-		IReadOnlyCollection<NeuralNetworkNeuron> GetNeurons();
-
-		void SetExpectedOutputs(double[] expectedOutputs);
-
-		void SetInputs(double[] inputs);
-	}
-
-	public sealed class NeuronLayer: INeuralNetworkLayer
+	public sealed class NeuralNetworkLayer: INeuralNetworkLayer
 	{
 		public readonly IList<NeuralNetworkNeuron> Neurons;
 
 		private readonly Bias _bias;
 
-		public NeuronLayerType LayerType { get; set; }
+		public readonly NeuronLayerType LayerType;
 
-
-
-		public NeuronLayer(NeuronLayerType layerType, IEnumerable<NeuralNetworkNeuron> neurons, Bias bias)
+		public NeuralNetworkLayer(NeuronLayerType layerType, IEnumerable<NeuralNetworkNeuron> neurons, Bias bias)
 		{
 			if (neurons == null)
 				throw new ArgumentNullException(nameof(neurons));
@@ -47,6 +28,20 @@ namespace Veises.Neural
 			foreach (var neuron in Neurons)
 			{
 				neuron.AdjustWeights();
+			}
+		}
+
+		public void InitializeErrors(params double [] desiredOutput)
+		{
+			if (desiredOutput == null)
+				throw new ArgumentNullException(nameof(desiredOutput));
+
+			if (LayerType != NeuronLayerType.Output)
+				throw new ApplicationException("Errors can't be initialized for non-output layers");
+
+			for (var i = 0; i <Neurons.Count; i++)
+			{
+				Neurons[i].CalculateError(desiredOutput[i]);
 			}
 		}
 
@@ -75,20 +70,6 @@ namespace Veises.Neural
 			Neurons
 				.ToArray();
 
-		public void SetExpectedOutputs(double[] expectedOutputs)
-		{
-			if (expectedOutputs == null)
-				throw new ArgumentNullException(nameof(expectedOutputs));
-
-			if (Neurons.Count != expectedOutputs.Length)
-				throw new ArgumentException("Expected output items count mismatch", nameof(expectedOutputs));
-
-			for (var i = 0; i < Neurons.Count; i++)
-			{
-				Neurons[i].CalculateError(expectedOutputs[i] - Neurons[i].Output);
-			}
-		}
-
 		public void SetInputs(double[] inputs)
 		{
 			if (inputs == null)
@@ -104,5 +85,7 @@ namespace Veises.Neural
 				neuron.SetInput(inputs[i++]);
 			}
 		}
+
+
 	}
 }
