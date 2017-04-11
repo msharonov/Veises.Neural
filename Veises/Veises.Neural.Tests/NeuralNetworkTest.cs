@@ -64,11 +64,10 @@ namespace Veises.Neural.Tests
 		{
 			var activationFunction = new SigmoidFunction();
 
-			var neuronBuilder = new NeuronBuilder(activationFunction);
-			var neuralNetworkLayerBuilder = new NeuralNetworkLayerBuilder(neuronBuilder);
+			var neuralNetworkLayerBuilder = new NeuralNetworkLayerBuilder(activationFunction);
 			var neuralNetworkBuilder = new NeuralNetworkBuilder(neuralNetworkLayerBuilder, activationFunction);
 
-			_target = neuralNetworkBuilder.Build(new[] { 15, 50, 50, 3 });
+			_target = neuralNetworkBuilder.Build(new[] { 15, 50, 3 });
 
 			var networkTrainer = new NeuralNetworkTrainer();
 

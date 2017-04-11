@@ -5,13 +5,13 @@ namespace Veises.Neural
 {
 	public sealed class NeuralNetworkLayerBuilder: INeuralNetworkLayerBuilder
 	{
-		private readonly INeuronBuilder _neuronBuilder;
-
 		private const int LayerMinimalNeuronsCount = 1;
 
-		public NeuralNetworkLayerBuilder(INeuronBuilder neuronBuilder)
+		private readonly IActivationFunction _activationFunction;
+
+		public NeuralNetworkLayerBuilder(IActivationFunction activationFunction)
 		{
-			_neuronBuilder = neuronBuilder ?? throw new ArgumentNullException(nameof(neuronBuilder));
+			_activationFunction = activationFunction ?? throw new ArgumentNullException(nameof(activationFunction));
 		}
 
 		public INeuralNetworkLayer Build(NeuronLayerType layerType, int neuronsCount)
@@ -23,7 +23,7 @@ namespace Veises.Neural
 
 			var neurons = Enumerable
 				.Range(0, neuronsCount)
-				.Select(_ => _neuronBuilder.Build(layerBias));
+				.Select(_ => new NeuralNetworkNeuron(_activationFunction, layerBias));
 
 			return new NeuralNetworkLayer(layerType, neurons, layerBias);
 		}

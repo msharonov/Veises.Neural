@@ -14,6 +14,8 @@
 
 		void CalculateError();
 
+		void CalculateError(double target);
+
 		void CalculateOutput();
 
 		void SetInput(double input);

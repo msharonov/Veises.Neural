@@ -12,7 +12,9 @@ namespace Veises.Neural
 
 		private readonly IActivationFunction _activationFunction;
 
-		public NeuralNetworkBuilder(INeuralNetworkLayerBuilder neuronLayerBuilder, IActivationFunction activationFunction)
+		public NeuralNetworkBuilder(
+			INeuralNetworkLayerBuilder neuronLayerBuilder,
+			IActivationFunction activationFunction)
 		{
 			_neuronLayerBuilder = neuronLayerBuilder ?? throw new ArgumentNullException(nameof(neuronLayerBuilder));
 			_activationFunction = activationFunction ?? throw new ArgumentNullException(nameof(activationFunction));

@@ -1,18 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Veises.Neural
 {
-	public sealed class NeuralNetworkLayer: INeuralNetworkLayer
+	public class NeuralNetworkLayer: INeuralNetworkLayer
 	{
-		public readonly IList<NeuralNetworkNeuron> Neurons;
+		public readonly IList<INeuralNetworkNeuron> Neurons;
 
 		private readonly Bias _bias;
 
 		public readonly NeuronLayerType LayerType;
 
-		public NeuralNetworkLayer(NeuronLayerType layerType, IEnumerable<NeuralNetworkNeuron> neurons, Bias bias)
+		public NeuralNetworkLayer(
+			NeuronLayerType layerType,
+			IEnumerable<INeuralNetworkNeuron> neurons,
+			Bias bias)
 		{
 			if (neurons == null)
 				throw new ArgumentNullException(nameof(neurons));
@@ -21,6 +25,8 @@ namespace Veises.Neural
 
 			Neurons = neurons.ToList();
 			LayerType = layerType;
+
+			Debug.WriteLine($"Neural network layer with type '{GetType().Name}' was created");
 		}
 
 		public void AdjustWeights()
@@ -66,9 +72,7 @@ namespace Veises.Neural
 				.Select(_ => _.Output)
 				.ToArray();
 
-		public IReadOnlyCollection<NeuralNetworkNeuron> GetNeurons() =>
-			Neurons
-				.ToArray();
+		public IReadOnlyCollection<INeuralNetworkNeuron> GetNeurons() => Neurons.ToArray();
 
 		public void SetInputs(double[] inputs)
 		{
