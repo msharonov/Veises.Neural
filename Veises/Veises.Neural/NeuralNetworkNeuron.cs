@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Veises.Neural
@@ -25,6 +26,8 @@ namespace Veises.Neural
 
 			_outputAxons = new List<INeuralNetworkAxon>();
 			_inputAxons = new List<INeuralNetworkAxon>();
+
+			Debug.WriteLine($"Neural network neuron with type {GetType().Name} was created");
 		}
 
 		public void AddOutput(INeuralNetworkAxon axon)

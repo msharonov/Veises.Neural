@@ -1,28 +1,60 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
+using System;
+using System.Linq;
 using Veises.Neural;
 
 namespace Veises.Recurrent.Tests
 {
-	[TestClass]
+	[TestFixture]
 	public sealed class RecurrentNeuralNetworkTest
 	{
 		private INeuralNetwork _recurrentNetwork;
 		
-		[TestInitialize]
+		[SetUp]
 		public void SetUp()
 		{
 			var activationFunction = new SigmoidFunction();
 
-			var neuronBuilder = new NeuronBuilder(activationFunction);
-			var neuralNetworkLayerBuilder = new NeuralNetworkLayerBuilder(neuronBuilder);
+			var neuralNetworkLayerBuilder = new NeuralNetworkLayerBuilder(activationFunction);
 			var recurrentNeuronNetworkBuilder = new NeuralNetworkBuilder(neuralNetworkLayerBuilder, activationFunction);
 
-			_recurrentNetwork = recurrentNeuronNetworkBuilder.Build(new[] { 1, 1, 1 });
+			_recurrentNetwork = recurrentNeuronNetworkBuilder.Build(new[] { 3, 3, 3 });
 		}
 		
-		[TestMethod]
+		[Test]
 		public void ShouldBuildRecurrentNetwork()
 		{
+			var networkTrainer = new NeuralNetworkTrainer();
+
+			var testInput = new[]
+			{
+				1d,
+				2d,
+				3d
+			};
+
+			var desiredOutput = testInput
+				.Select(_ => Math.Sin(_))
+				.ToArray();
+
+			networkTrainer.Load(_recurrentNetwork);
+			networkTrainer.Train(
+				new NetworkLearnCase(testInput, desiredOutput));
+
+			var validationInput = new[]
+			{
+				2d,
+				3d,
+				4d
+			};
+
+			_recurrentNetwork.SetInputs(validationInput);
+
+			// --
+
+			var result = _recurrentNetwork.GetOutputs();
+
+			// --
 		}
 	}
 }

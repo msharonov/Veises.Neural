@@ -12,7 +12,7 @@ namespace Veises.Neural
 
 		IReadOnlyCollection<double> GetOutputs();
 
-		IReadOnlyCollection<NeuralNetworkNeuron> GetNeurons();
+		IReadOnlyCollection<INeuralNetworkNeuron> GetNeurons();
 
 		void InitializeErrors(params double[] desiredOutput);
 

@@ -8,11 +8,12 @@ namespace Veises.Recurrent
 	public sealed class RecurrentNeuron: NeuralNetworkNeuron
 	{
 		private readonly IReadOnlyCollection<INeuralNetworkAxon> _layerContextAxons;
-		private readonly INeuralNetworkAxon _outContextAxon;
+
+		private readonly INeuralNetworkNeuron _contextNeuron;
 
 		public RecurrentNeuron(
 			IReadOnlyCollection<INeuralNetworkNeuron> layerContextNeurons,
-			INeuralNetworkNeuron outContextNeuron,
+			INeuralNetworkNeuron contextNeuron,
 			IActivationFunction activationFunction,
 			Bias bias)
 			: base(activationFunction, bias)
@@ -20,15 +21,13 @@ namespace Veises.Recurrent
 			if (layerContextNeurons == null)
 				throw new ArgumentNullException(nameof(layerContextNeurons));
 
-			if (outContextNeuron == null)
-				throw new ArgumentNullException(nameof(outContextNeuron));
-
 			_layerContextAxons = BuildAxonsForLayerContextNeurons(layerContextNeurons);
 
-			_outContextAxon = new NeuralnetworkStaticAxon(this, outContextNeuron);
+			_contextNeuron = contextNeuron ?? throw new ArgumentNullException(nameof(contextNeuron));
 		}
 
-		private List<INeuralNetworkAxon> BuildAxonsForLayerContextNeurons(IReadOnlyCollection<INeuralNetworkNeuron> layerContextNeurons)
+		private List<INeuralNetworkAxon> BuildAxonsForLayerContextNeurons(
+			IReadOnlyCollection<INeuralNetworkNeuron> layerContextNeurons)
 		{
 			var layerContextAxons = new List<INeuralNetworkAxon>();
 
@@ -49,13 +48,15 @@ namespace Veises.Recurrent
 				inputSum += inputAxon.GetOutput();
 			}
 
+			inputSum += _inputAxons.Sum(_ => _.GetOutput());
+
 			inputSum += _bias.Weight;
 
 			inputSum += _layerContextAxons.Sum(_ => _.GetOutput());
 
 			Output = _activationFunction.Activate(inputSum);
 
-			_outContextAxon.GetOutputNeuron().SetInput(Output);
+			_contextNeuron.SetInput(Output);
 		}
 	}
 }
