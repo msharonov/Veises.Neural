@@ -31,9 +31,13 @@ namespace Veises.Neural
 
 					var outputs = _neuralNetwork.GetOutputs().ToArray();
 
+					_neuralNetwork.GetGlobalError(learnCase.Expected);
+
 					for (var i = 0; i < learnCase.Expected.Length; i++)
 					{
 						var diff = Math.Abs(learnCase.Expected[i] - outputs[i]);
+
+						Debug.WriteLine($"Diff: {diff}");
 
 						var isValueEaquals = diff < Settings.Default.LearningTestAcceptance;
 

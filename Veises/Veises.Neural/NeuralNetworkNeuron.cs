@@ -22,7 +22,7 @@ namespace Veises.Neural
 		public NeuralNetworkNeuron(IActivationFunction activationFunction, Bias bias)
 		{
 			_activationFunction = activationFunction ?? throw new ArgumentNullException(nameof(activationFunction));
-			_bias = bias ?? throw new ArgumentNullException(nameof(bias));
+			_bias = bias;
 
 			_outputAxons = new List<INeuralNetworkAxon>();
 			_inputAxons = new List<INeuralNetworkAxon>();
@@ -55,7 +55,8 @@ namespace Veises.Neural
 				inputSum += axon.GetOutput();
 			}
 
-			inputSum += _bias.Weight;
+			if (_bias != null)
+				inputSum += _bias.Weight;
 
 			Output = _activationFunction.Activate(inputSum);
 		}

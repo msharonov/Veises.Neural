@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Veises.Neural
@@ -46,6 +47,8 @@ namespace Veises.Neural
 			}
 
 			var globalError = 0.5 * sum;
+
+			Debug.WriteLine($"Network global error: {globalError}");
 
 			return globalError;
 		}

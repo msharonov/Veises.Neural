@@ -32,6 +32,8 @@ namespace Veises.Neural
 
 			var layers = new List<INeuralNetworkLayer>();
 
+			INeuralNetworkLayer previousLayer = null;
+
 			for (var layerNumber = 0; layerNumber < layerNeuronsCount.Length; layerNumber++)
 			{
 				var layerType = NeuronLayerType.Hidden;
@@ -45,12 +47,12 @@ namespace Veises.Neural
 
 				layers.Add(layer);
 
-				if (layerNumber > 0)
+				if (layerType != NeuronLayerType.Input)
 				{
-					var previousLayer = layers[layerNumber - 1];
-
 					NeuralNetworkAxon.Create(previousLayer, layer);
 				}
+
+				previousLayer = layer;
 
 				Debug.WriteLine($"Neuron {layerType} layer {layerNumber + 1} created");
 			}
