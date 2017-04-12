@@ -29,7 +29,7 @@ namespace Veises.Neural
 			Debug.WriteLine($"Neural network layer with type '{GetType().Name}' was created");
 		}
 
-		public void AdjustWeights()
+		public virtual void AdjustWeights()
 		{
 			foreach (var neuron in Neurons)
 			{
@@ -51,7 +51,7 @@ namespace Veises.Neural
 			}
 		}
 
-		public void BackpropagateError()
+		public virtual void BackpropagateError()
 		{
 			foreach (var neuron in Neurons)
 			{
@@ -59,7 +59,7 @@ namespace Veises.Neural
 			}
 		}
 
-		public void CalculateOutputs()
+		public virtual void CalculateOutputs()
 		{
 			foreach (var perceptron in Neurons)
 			{
@@ -67,7 +67,7 @@ namespace Veises.Neural
 			}
 		}
 
-		public IReadOnlyCollection<double> GetOutputs() =>
+		public virtual IReadOnlyCollection<double> GetOutputs() =>
 			Neurons
 				.Select(_ => _.Output)
 				.ToArray();

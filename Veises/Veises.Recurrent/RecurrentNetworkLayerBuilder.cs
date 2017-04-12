@@ -33,9 +33,10 @@ namespace Veises.Recurrent
 			{
 				var layerNeuron = new RecurrentNeuron(
 					contextNeurons,
-					contextNeurons[i],
 					_activationFunction,
 					layerBias);
+
+				layerNeurons.Add(layerNeuron);
 			}
 
 			var layer = new RecurrentNeuralNetworkLayer(

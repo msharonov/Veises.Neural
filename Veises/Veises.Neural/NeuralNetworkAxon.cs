@@ -15,20 +15,36 @@ namespace Veises.Neural
 
 		private static readonly Random _random = new Random();
 
-		private double _delta = 0d;
+		private readonly bool _isWithMomentum;
 
-		public NeuralNetworkAxon(INeuralNetworkNeuron parent, INeuralNetworkNeuron child)
+		private double _delta;
+
+		public NeuralNetworkAxon(
+			INeuralNetworkNeuron parent,
+			INeuralNetworkNeuron child,
+			bool isWithMomentum = false)
 		{
 			_inputNeuron = parent ?? throw new ArgumentNullException(nameof(parent));
 			_outputNeuron = child ?? throw new ArgumentNullException(nameof(child));
+
+			_isWithMomentum = isWithMomentum;
 		}
 
 		public virtual void AdjustWeight()
 		{
-			_delta = Settings.Default.LearningRate
-				* _outputNeuron.Error
-				* _inputNeuron.Output +
-				_delta * Settings.Default.Momentum;
+			if (_isWithMomentum)
+			{
+				_delta = Settings.Default.LearningRate
+					* _outputNeuron.Error
+					* _inputNeuron.Output +
+					_delta * Settings.Default.Momentum;
+			}
+			else
+			{
+				_delta = Settings.Default.LearningRate
+					* _outputNeuron.Error
+					* _inputNeuron.Output;
+			}
 
 			Weight += _delta;
 		}
