@@ -12,9 +12,9 @@
 
 		void AdjustWeights();
 
-		void CalculateError();
+		void BackpropagateError();
 
-		void CalculateError(double target);
+		void BackpropagateError(double target);
 
 		void CalculateOutput();
 

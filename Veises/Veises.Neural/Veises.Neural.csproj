@@ -47,6 +47,7 @@
     <Compile Include="BipolarSigmoidActivationFunction.cs" />
     <Compile Include="DeltaFunction.cs" />
     <Compile Include="ErrorSsignalFunction.cs" />
+    <Compile Include="GlobalErrorNeuralNetworkTrainer.cs" />
     <Compile Include="IActivationFunction.cs" />
     <Compile Include="IErrorFunction.cs" />
     <Compile Include="INeuralNetwork.cs" />

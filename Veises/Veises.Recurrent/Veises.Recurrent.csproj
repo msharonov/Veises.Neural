@@ -54,7 +54,7 @@
     <Compile Include="RecurrentNetworkLayerBuilder.cs" />
     <Compile Include="RecurrentNetworkOld.cs" />
     <Compile Include="RecurrentNeuralNetworkLayer.cs" />
-    <Compile Include="RecurrentNeuron.cs" />
+    <Compile Include="RecurrentNeuralNetworkNeuron.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />

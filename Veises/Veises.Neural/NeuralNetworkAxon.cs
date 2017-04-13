@@ -46,7 +46,7 @@ namespace Veises.Neural
 					* _inputNeuron.Output;
 			}
 
-			Weight += _delta;
+			Weight -= _delta;
 		}
 
 		public static INeuralNetworkAxon Create(INeuralNetworkNeuron input, INeuralNetworkNeuron output)
@@ -69,7 +69,6 @@ namespace Veises.Neural
 		{
 			if (inputLayer == null)
 				throw new ArgumentNullException(nameof(inputLayer));
-
 			if (outputLayer == null)
 				throw new ArgumentNullException(nameof(outputLayer));
 

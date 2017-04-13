@@ -35,7 +35,7 @@ namespace Veises.Recurrent
 
 			foreach (var contextNeuron in _contextNeurons)
 			{
-				contextNeuron.CalculateError();
+				contextNeuron.BackpropagateError();
 			}
 		}
 
@@ -43,6 +43,11 @@ namespace Veises.Recurrent
 		{
 			base.CalculateOutputs();
 
+			CloneLayerOutputToContext();
+		}
+
+		private void CloneLayerOutputToContext()
+		{
 			var contextNeuronsEnumerator = _contextNeurons.GetEnumerator();
 
 			contextNeuronsEnumerator.MoveNext();
@@ -55,29 +60,27 @@ namespace Veises.Recurrent
 			}
 		}
 
-		public override IReadOnlyCollection<double> GetOutputs()
+		public override IEnumerable<double> GetOutputs()
 		{
 			var outputs = base.GetOutputs();
 
 			if (LayerType != NeuronLayerType.Output)
 				return outputs;
 
-			return Softmax(outputs.ToArray());
+			return outputs; // Softmax(outputs);
 		}
 
-		private double[] Softmax(double[] input)
+		private static IEnumerable<double> Softmax(IEnumerable<double> inputValues)
 		{
-			var result = new double[input.Length];
+			if (inputValues == null)
+				throw new ArgumentNullException(nameof(inputValues));
 
-			var sum = 0.0;
+			var sum = inputValues.Sum(_ => Math.Exp(_));
 
-			for (var k = 0; k < input.Length; ++k)
-				sum += Math.Exp(input[k]);
-
-			for (var k = 0; k < input.Length; ++k)
-				result[k] = Math.Exp(input[k]) / sum;
-
-			return result;
+			foreach (var inputValue in inputValues)
+			{
+				yield return Math.Exp(inputValue) / sum;
+			}
 		}
 	}
 }

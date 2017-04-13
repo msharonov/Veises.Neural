@@ -19,7 +19,9 @@ namespace Veises.Neural
 
 		public double Output { get; protected set; }
 
-		public NeuralNetworkNeuron(IActivationFunction activationFunction, Bias bias)
+		public NeuralNetworkNeuron(
+			IActivationFunction activationFunction,
+			Bias bias)
 		{
 			_activationFunction = activationFunction ?? throw new ArgumentNullException(nameof(activationFunction));
 			_bias = bias;
@@ -69,38 +71,35 @@ namespace Veises.Neural
 			}
 		}
 
-		public void CalculateError(double target)
+		/// <summary>
+		/// Calculate error for output layer neuron
+		/// </summary>
+		/// <param name="target">Desired output value for neuron</param>
+		public void BackpropagateError(double target)
 		{
 			if (_outputAxons.Count() > 0)
 				throw new ApplicationException("Can't calculate error for non-output layer neuron");
 
-			var dif = target - Output;
-
-			var errorSum = 0d;
-
-			foreach (var outputAxon in _outputAxons)
-			{
-				errorSum += outputAxon.WeightedError;
-			}
-
-			Error = dif * _activationFunction.Deactivate(errorSum);
+			Error = (Output - target) * _activationFunction.GetDerivative(Output);
 		}
 
-		public void CalculateError()
+		/// <summary>
+		/// Calculare error for hidder layer neuron
+		/// </summary>
+		public void BackpropagateError()
 		{
 			if (_outputAxons.Count() == 0)
 				throw new ApplicationException("Can't calculate error for output layer neuron");
 
-			var weightErrorSum = 0d;
+			var weightErrorSum = _outputAxons.Sum(_ => _.WeightedError);
 
-			foreach (var axon in _outputAxons)
-			{
-				weightErrorSum += axon.WeightedError;
-			}
-
-			Error = weightErrorSum * _activationFunction.Deactivate(Output);
+			Error = weightErrorSum * _activationFunction.GetDerivative(Output);
 		}
 
+		/// <summary>
+		/// Set value for Neuron
+		/// </summary>
+		/// <param name="input"></param>
 		public void SetInput(double input) => Output = input;
 	}
 }

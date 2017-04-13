@@ -87,7 +87,7 @@ namespace Veises.Neural.Perceptron
 		{
 			var output = CalculateOutput();
 
-			var sumActivation = _activationFunction.Deactivate(output);
+			var sumActivation = _activationFunction.GetDerivative(output);
 
 			var error = (desiredOutput - output) * sumActivation;
 
