@@ -7,7 +7,7 @@ namespace Veises.Neural
 {
 	public class NeuralNetworkLayer: INeuralNetworkLayer
 	{
-		public readonly IList<INeuralNetworkNeuron> Neurons;
+		protected readonly IList<INeuralNetworkNeuron> Neurons;
 
 		private readonly Bias _bias;
 
@@ -37,7 +37,7 @@ namespace Veises.Neural
 			}
 		}
 
-		public void InitializeErrors(params double [] desiredOutput)
+		public void InitializeErrors(double [] desiredOutput)
 		{
 			if (desiredOutput == null)
 				throw new ArgumentNullException(nameof(desiredOutput));
@@ -47,7 +47,7 @@ namespace Veises.Neural
 
 			for (var i = 0; i <Neurons.Count; i++)
 			{
-				Neurons[i].CalculateError(desiredOutput[i]);
+				Neurons[i].BackpropagateError(desiredOutput[i]);
 			}
 		}
 
@@ -55,24 +55,22 @@ namespace Veises.Neural
 		{
 			foreach (var neuron in Neurons)
 			{
-				neuron.CalculateError();
+				neuron.BackpropagateError();
 			}
 		}
 
 		public virtual void CalculateOutputs()
 		{
-			foreach (var perceptron in Neurons)
+			foreach (var neuron in Neurons)
 			{
-				perceptron.CalculateOutput();
+				neuron.CalculateOutput();
 			}
 		}
 
-		public virtual IReadOnlyCollection<double> GetOutputs() =>
-			Neurons
-				.Select(_ => _.Output)
-				.ToArray();
+		public virtual IEnumerable<double> GetOutputs() =>
+			Neurons.Select(_ => _.Output);
 
-		public IReadOnlyCollection<INeuralNetworkNeuron> GetNeurons() => Neurons.ToArray();
+		public IEnumerable<INeuralNetworkNeuron> GetNeurons() => Neurons;
 
 		public void SetInputs(double[] inputs)
 		{
@@ -89,7 +87,5 @@ namespace Veises.Neural
 				neuron.SetInput(inputs[i++]);
 			}
 		}
-
-
 	}
 }

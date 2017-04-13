@@ -27,25 +27,20 @@ namespace Veises.Recurrent
 
 			var layerBias = new Bias();
 
-			var layerNeurons = new List<RecurrentNeuron>();
-
-			for (var i = 0; i < neuronsCount; i++)
-			{
-				var layerNeuron = new RecurrentNeuron(
+			var layerNeurons = Enumerable.Range(0, neuronsCount)
+				.Select(_ => new RecurrentNeuralNetworkNeuron(
 					contextNeurons,
 					_activationFunction,
-					layerBias);
+					layerBias))
+				.ToList();
 
-				layerNeurons.Add(layerNeuron);
-			}
-
-			var layer = new RecurrentNeuralNetworkLayer(
+			var recurrentLayer = new RecurrentNeuralNetworkLayer(
 				layerType,
 				layerNeurons,
 				contextNeurons,
 				layerBias);
 
-			return layer;
+			return recurrentLayer;
 		}
 	}
 }

@@ -9,7 +9,7 @@ namespace Veises.Recurrent.Tests
 	public sealed class RecurrentNeuralNetworkTest
 	{
 		private INeuralNetwork _recurrentNetwork;
-		
+
 		[SetUp]
 		public void SetUp()
 		{
@@ -20,7 +20,7 @@ namespace Veises.Recurrent.Tests
 
 			_recurrentNetwork = neuronNetworkBuilder.Build(new[] { 3, 3, 3 });
 		}
-		
+
 		[Test]
 		public void ShouldBuildRecurrentNetwork()
 		{
@@ -29,9 +29,9 @@ namespace Veises.Recurrent.Tests
 
 			var testInput = new[]
 			{
-				0.1d,
-				0.2d,
-				0.3d
+				1d,
+				2d,
+				3d
 			};
 
 			var desiredOutput = testInput
@@ -40,37 +40,37 @@ namespace Veises.Recurrent.Tests
 
 			networkTrainer.Train(new NetworkLearnCase(testInput, desiredOutput));
 
-//			testInput = new[]
-//{
-//				2d,
-//				3d,
-//				4d
-//			};
+			//			testInput = new[]
+			//{
+			//				4d,
+			//				5d,
+			//				6d
+			//			};
 
-//			desiredOutput = testInput
-//				.Select(_ => Math.Sin(_))
-//				.ToArray();
+			//			desiredOutput = testInput
+			//				.Select(_ => Math.Sin(_))
+			//				.ToArray();
 
-//			networkTrainer.Train(new NetworkLearnCase(testInput, desiredOutput));
+			//			networkTrainer.Train(new NetworkLearnCase(testInput, desiredOutput));
 
-//			testInput = new[]
-//{
-//				3d,
-//				4d,
-//				5d
-//			};
+			//			testInput = new[]
+			//{
+			//				3d,
+			//				4d,
+			//				5d
+			//			};
 
-//			desiredOutput = testInput
-//				.Select(_ => Math.Sin(_))
-//				.ToArray();
+			//			desiredOutput = testInput
+			//				.Select(_ => Math.Sin(_))
+			//				.ToArray();
 
-//			networkTrainer.Train(new NetworkLearnCase(testInput, desiredOutput));
+			//			networkTrainer.Train(new NetworkLearnCase(testInput, desiredOutput));
 
 			var validationInput = new[]
 			{
-				0.2d,
-				0.3d,
-				0.4d
+				4d,
+				5d,
+				6d
 			};
 
 			_recurrentNetwork.SetInputs(validationInput);

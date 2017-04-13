@@ -7,7 +7,7 @@ namespace Veises.Neural
 		public double Activate(double sum)
 			=> 1d / (1d + Math.Exp(-sum));
 
-		public double Deactivate(double output)
+		public double GetDerivative(double output)
 			=> Activate(output) * (1d - Activate(output));
 	}
 }

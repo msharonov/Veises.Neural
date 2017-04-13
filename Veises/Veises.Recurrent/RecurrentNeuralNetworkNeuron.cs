@@ -5,11 +5,11 @@ using Veises.Neural;
 
 namespace Veises.Recurrent
 {
-	public sealed class RecurrentNeuron: NeuralNetworkNeuron
+	public sealed class RecurrentNeuralNetworkNeuron: NeuralNetworkNeuron
 	{
 		private readonly IReadOnlyCollection<INeuralNetworkAxon> _layerContextAxons;
 
-		public RecurrentNeuron(
+		public RecurrentNeuralNetworkNeuron(
 			IReadOnlyCollection<INeuralNetworkNeuron> layerContextNeurons,
 			IActivationFunction activationFunction,
 			Bias bias)
@@ -21,8 +21,8 @@ namespace Veises.Recurrent
 			_layerContextAxons = BuildAxonsForLayerContextNeurons(layerContextNeurons);
 		}
 
-		private List<INeuralNetworkAxon> BuildAxonsForLayerContextNeurons(
-			IReadOnlyCollection<INeuralNetworkNeuron> layerContextNeurons)
+		private IReadOnlyCollection<INeuralNetworkAxon> BuildAxonsForLayerContextNeurons(
+			IEnumerable<INeuralNetworkNeuron> layerContextNeurons)
 		{
 			var layerContextAxons = new List<INeuralNetworkAxon>();
 
@@ -40,7 +40,9 @@ namespace Veises.Recurrent
 
 			inputSum += _bias.Weight;
 
-			inputSum += _layerContextAxons.Sum(_ => _.GetOutput());
+			var contextInputSum = _layerContextAxons.Sum(_ => _.GetOutput());
+
+			inputSum += contextInputSum;
 
 			Output = _activationFunction.Activate(inputSum);
 		}
