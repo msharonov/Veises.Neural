@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
 
 namespace Veises.Neural
@@ -7,15 +8,14 @@ namespace Veises.Neural
 	{
 		private const int LayerMinimalNeuronsCount = 1;
 
-		private readonly IActivationFunction _activationFunction;
-
-		public NeuralNetworkLayerBuilder(IActivationFunction activationFunction)
+		public INeuralNetworkLayer Build(
+			NeuronLayerType layerType,
+			int neuronsCount,
+			IActivationFunction activationFunction)
 		{
-			_activationFunction = activationFunction ?? throw new ArgumentNullException(nameof(activationFunction));
-		}
+			if (activationFunction == null)
+				throw new ArgumentNullException(nameof(activationFunction));
 
-		public INeuralNetworkLayer Build(NeuronLayerType layerType, int neuronsCount)
-		{
 			if (neuronsCount < LayerMinimalNeuronsCount)
 				throw new ArgumentException($"Layer neurons count can not be less than {LayerMinimalNeuronsCount}.");
 
@@ -23,9 +23,13 @@ namespace Veises.Neural
 
 			var neurons = Enumerable
 				.Range(0, neuronsCount)
-				.Select(_ => new NeuralNetworkNeuron(_activationFunction, layerBias));
+				.Select(_ => new NeuralNetworkNeuron(activationFunction, layerBias));
 
-			return new NeuralNetworkLayer(layerType, neurons, layerBias);
+			var layer = new NeuralNetworkLayer(layerType, neurons, layerBias);
+
+			Debug.WriteLine($"Network {layerType} layer with {neuronsCount} neurons was created");
+
+			return layer;
 		}
 	}
 }

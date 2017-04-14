@@ -2,6 +2,6 @@
 {
 	public interface INeuralNetworkLayerBuilder
 	{
-		INeuralNetworkLayer Build(NeuronLayerType layerType, int neuronsCount);
+		INeuralNetworkLayer Build(NeuronLayerType layerType, int neuronsCount, IActivationFunction activationFunction);
 	}
 }

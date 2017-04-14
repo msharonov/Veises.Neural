@@ -6,14 +6,13 @@ namespace Veises.Recurrent
 	{
 		public override double Weight => 1d;
 
-		public override double WeightedError => 0d;
-
 		public NeuralnetworkStaticAxon(
 			INeuralNetworkNeuron parent,
-			INeuralNetworkNeuron child)
+			INeuralNetworkNeuron child,
+			double weight = 1d)
 			: base(parent, child)
 		{
-
+			Weight = weight;
 		}
 
 		public override void AdjustWeight()

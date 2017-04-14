@@ -19,24 +19,46 @@ namespace Veises.Neural
 			if (_neuralNetwork == null)
 				throw new InvalidOperationException("Neural network is not initialized");
 
-			foreach (var learningCase in learningCases)
+			var iterationCount = 1;
+
+			while (true)
 			{
-				var iterationNumber = 1;
+				var requireRepeat = false;
 
-				do
+				var globalErrorSum = 0d;
+
+				foreach (var learnCase in learningCases)
 				{
-					_neuralNetwork.SetInputs(learningCase.Input);
+					var isExpectedEqualsOutput = true;
 
-					var globalError = _neuralNetwork.GetGlobalError(learningCase.Expected);
+					_neuralNetwork.SetInputs(learnCase.Input);
 
-					if (globalError < Settings.Default.LearningTestAcceptance)
-						break;
+					var globalError = _neuralNetwork.GetGlobalError(learnCase.Expected);
 
-					Debug.WriteLine($"Training iteration {iterationNumber}");
+					var isValueEaquals = globalError < Settings.Default.LearningTestAcceptance;
 
-					iterationNumber++;
+					if (isValueEaquals == false)
+						isExpectedEqualsOutput = false;
+
+					if (!isExpectedEqualsOutput)
+					{
+						_neuralNetwork.Learn(learnCase.Expected);
+
+						requireRepeat = true;
+					}
+
+					globalErrorSum += globalError;
 				}
-				while (true);
+
+				if (!requireRepeat)
+					break;
+
+				Debug.WriteLine($"Learn iterations total count: {iterationCount}, global error: {globalErrorSum}");
+
+				iterationCount++;
+
+				if (iterationCount > 1000)
+					break;
 			}
 		}
 	}
