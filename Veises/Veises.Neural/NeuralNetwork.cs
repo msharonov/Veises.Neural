@@ -46,7 +46,7 @@ namespace Veises.Neural
 				sum += Math.Pow(desiredOutputs[i] - outputs[i], 2d);
 			}
 
-			var globalError = 0.5 * sum;
+			var globalError = 0.5d * sum;
 
 			Debug.WriteLine($"Network global error: {globalError}");
 

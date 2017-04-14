@@ -13,64 +13,48 @@ namespace Veises.Recurrent.Tests
 		[SetUp]
 		public void SetUp()
 		{
-			var activationFunction = new SigmoidFunction();
+			var neuronNetworkBuilder = new RecurrentNeuralNetworkBuilder(
+				new NeuralNetworkLayerBuilder(),
+				new RecurrentNetworkLayerBuilder());
 
-			var neuralNetworkLayerBuilder = new RecurrentNetworkLayerBuilder(activationFunction);
-			var neuronNetworkBuilder = new NeuralNetworkBuilder(neuralNetworkLayerBuilder, activationFunction);
-
-			_recurrentNetwork = neuronNetworkBuilder.Build(new[] { 3, 3, 3 });
+			_recurrentNetwork = neuronNetworkBuilder.Build(
+				new[] { 3, 3, 3 },
+				new SigmoidFunction());
 		}
 
-		[Test]
-		public void ShouldBuildRecurrentNetwork()
+		private static NetworkLearnCase GetLearnCase(double step)
 		{
-			var networkTrainer = new NeuralNetworkTrainer();
-			networkTrainer.Load(_recurrentNetwork);
-
 			var testInput = new[]
-			{
-				1d,
-				2d,
-				3d
+{
+				1d + step,
+				2d + step,
+				3d + step
 			};
 
 			var desiredOutput = testInput
 				.Select(_ => Math.Sin(_))
 				.ToArray();
 
-			networkTrainer.Train(new NetworkLearnCase(testInput, desiredOutput));
+			return new NetworkLearnCase(testInput, desiredOutput);
+		}
 
-			//			testInput = new[]
-			//{
-			//				4d,
-			//				5d,
-			//				6d
-			//			};
+		[Test]
+		public void ShouldBuildRecurrentNetwork()
+		{
+			var networkTrainer = new GlobalErrorNeuralNetworkTrainer();
+			networkTrainer.Load(_recurrentNetwork);
 
-			//			desiredOutput = testInput
-			//				.Select(_ => Math.Sin(_))
-			//				.ToArray();
-
-			//			networkTrainer.Train(new NetworkLearnCase(testInput, desiredOutput));
-
-			//			testInput = new[]
-			//{
-			//				3d,
-			//				4d,
-			//				5d
-			//			};
-
-			//			desiredOutput = testInput
-			//				.Select(_ => Math.Sin(_))
-			//				.ToArray();
-
-			//			networkTrainer.Train(new NetworkLearnCase(testInput, desiredOutput));
+			networkTrainer.Train(
+				GetLearnCase(0d),
+				GetLearnCase(1d),
+				GetLearnCase(2d),
+				GetLearnCase(3d));
 
 			var validationInput = new[]
 			{
-				4d,
-				5d,
-				6d
+				7d,
+				8d,
+				9d
 			};
 
 			_recurrentNetwork.SetInputs(validationInput);

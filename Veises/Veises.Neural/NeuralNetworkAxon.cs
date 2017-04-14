@@ -11,8 +11,6 @@ namespace Veises.Neural
 
 		public virtual double Weight { get; protected set; } = _random.NextDouble();
 
-		public virtual double WeightedError => _outputNeuron.Error * Weight;
-
 		private static readonly Random _random = new Random();
 
 		private readonly bool _isWithMomentum;
@@ -86,5 +84,7 @@ namespace Veises.Neural
 		public double GetOutput() => _inputNeuron.Output * Weight;
 
 		public INeuralNetworkNeuron GetOutputNeuron() => _outputNeuron;
+
+		public virtual double GetWeightedError() => _outputNeuron.Error * Weight;
 	}
 }

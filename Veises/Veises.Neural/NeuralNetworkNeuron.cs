@@ -91,7 +91,7 @@ namespace Veises.Neural
 			if (_outputAxons.Count() == 0)
 				throw new ApplicationException("Can't calculate error for output layer neuron");
 
-			var weightErrorSum = _outputAxons.Sum(_ => _.WeightedError);
+			var weightErrorSum = _outputAxons.Sum(_ => _.GetWeightedError());
 
 			Error = weightErrorSum * _activationFunction.GetDerivative(Output);
 		}

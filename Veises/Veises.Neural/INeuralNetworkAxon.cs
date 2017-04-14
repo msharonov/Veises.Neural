@@ -4,11 +4,11 @@
 	{
 		double Weight { get; }
 
-		double WeightedError { get; }
-
 		void AdjustWeight();
 
 		double GetOutput();
+
+		double GetWeightedError();
 
 		INeuralNetworkNeuron GetInputNeuron();
 

@@ -10,24 +10,21 @@ namespace Veises.Neural
 
 		private readonly INeuralNetworkLayerBuilder _neuronLayerBuilder;
 
-		private readonly IActivationFunction _activationFunction;
-
-		public NeuralNetworkBuilder(
-			INeuralNetworkLayerBuilder neuronLayerBuilder,
-			IActivationFunction activationFunction)
+		public NeuralNetworkBuilder(INeuralNetworkLayerBuilder neuronLayerBuilder)
 		{
 			_neuronLayerBuilder = neuronLayerBuilder ?? throw new ArgumentNullException(nameof(neuronLayerBuilder));
-			_activationFunction = activationFunction ?? throw new ArgumentNullException(nameof(activationFunction));
 		}
 
-		public INeuralNetwork Build(int[] layerNeuronsCount)
+		public INeuralNetwork Build(int[] layerNeuronsCount, IActivationFunction activationFunction)
 		{
 			if (layerNeuronsCount == null)
 				throw new ArgumentNullException(nameof(layerNeuronsCount));
+			if (activationFunction == null)
+				throw new ArgumentNullException(nameof(activationFunction));
 
 			if (layerNeuronsCount.Length < MinimalLayersCount)
 				throw new ArgumentException(
-					$"Neuron layers count can not be less than {MinimalLayersCount}, but found {layerNeuronsCount.Length}.",
+					$"Neural network layers count can not be less than {MinimalLayersCount}, but found {layerNeuronsCount.Length}.",
 					nameof(layerNeuronsCount));
 
 			var layers = new List<INeuralNetworkLayer>();
@@ -43,7 +40,10 @@ namespace Veises.Neural
 				else if (layerNumber == layerNeuronsCount.Length - 1)
 					layerType = NeuronLayerType.Output;
 
-				var layer = _neuronLayerBuilder.Build(layerType, layerNeuronsCount[layerNumber]);
+				var layer = _neuronLayerBuilder.Build(
+					layerType,
+					layerNeuronsCount[layerNumber],
+					activationFunction);
 
 				layers.Add(layer);
 
@@ -53,11 +53,9 @@ namespace Veises.Neural
 				}
 
 				previousLayer = layer;
-
-				Debug.WriteLine($"Neuron {layerType} layer {layerNumber + 1} created");
 			}
 
-			return new NeuralNetwork(layers, _activationFunction);
+			return new NeuralNetwork(layers, activationFunction);
 		}
 	}
 }

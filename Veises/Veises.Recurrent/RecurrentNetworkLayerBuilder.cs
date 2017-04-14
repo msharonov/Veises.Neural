@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Veises.Neural;
 
@@ -9,20 +10,16 @@ namespace Veises.Recurrent
 	{
 		private const int MinimalNeuronsCount = 1;
 
-		private readonly IActivationFunction _activationFunction;
-
-		public RecurrentNetworkLayerBuilder(IActivationFunction activationFunction)
-		{
-			_activationFunction = activationFunction ?? throw new ArgumentNullException(nameof(activationFunction));
-		}
-
-		public INeuralNetworkLayer Build(NeuronLayerType layerType, int neuronsCount)
+		public INeuralNetworkLayer Build(
+			NeuronLayerType layerType,
+			int neuronsCount,
+			IActivationFunction activationFunction)
 		{
 			if (neuronsCount < MinimalNeuronsCount)
 				throw new ArgumentException($"Layer neurons count can not be less than {MinimalNeuronsCount}");
 
 			var contextNeurons = Enumerable.Range(0, neuronsCount)
-				.Select(_ => new NeuralNetworkNeuron(_activationFunction, null))
+				.Select(_ => new NeuralNetworkNeuron(activationFunction, null))
 				.ToList();
 
 			var layerBias = new Bias();
@@ -30,7 +27,8 @@ namespace Veises.Recurrent
 			var layerNeurons = Enumerable.Range(0, neuronsCount)
 				.Select(_ => new RecurrentNeuralNetworkNeuron(
 					contextNeurons,
-					_activationFunction,
+					contextNeurons[_],
+					activationFunction,
 					layerBias))
 				.ToList();
 
@@ -39,6 +37,8 @@ namespace Veises.Recurrent
 				layerNeurons,
 				contextNeurons,
 				layerBias);
+
+			Debug.WriteLine($"Recurrent {layerType} layer with {neuronsCount} neurons was created");
 
 			return recurrentLayer;
 		}
