@@ -1,13 +1,13 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using NUnit.Framework;
 
 namespace Veises.Recurrent.Tests
 {
-	[TestClass]
-	public sealed class RecurrentNetworkTest
+	[TestFixture]
+	public sealed class RecurrentNetworkOldTest
 	{
 		private RecurrentNetworkOld _recurrentNetwork;
 
-		[TestMethod]
+		[Test]
 		public void ShouldComputeOutputs()
 		{
 			var numInput = 2;
@@ -16,7 +16,6 @@ namespace Veises.Recurrent.Tests
 
 			var seed = 0;
 
-			// recurrent network 2-3-2
 			_recurrentNetwork = new RecurrentNetworkOld(numInput, numHidden, numOutput, seed);
 
 			var wts = new double[] {

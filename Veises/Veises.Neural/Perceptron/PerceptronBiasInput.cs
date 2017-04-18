@@ -20,13 +20,11 @@ namespace Veises.Neural.Perceptron
 
 		public double CalculateOutput() => Bias * Weight;
 
-		public void AdjustWeight(double desiredOutput)
+		public void AdjustWeight(double error)
 		{
 			var localOutput = CalculateOutput();
 
-			var localError = _errorFunction.Calculate(localOutput, desiredOutput);
-
-			Weight += Settings.Default.LearningRate * localError * Bias;
+			Weight += Settings.Default.LearningRate * Bias * error;
 		}
 	}
 }

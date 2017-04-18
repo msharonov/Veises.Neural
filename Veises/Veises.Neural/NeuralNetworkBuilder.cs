@@ -4,31 +4,32 @@ using System.Diagnostics;
 
 namespace Veises.Neural
 {
-	public sealed class NeuralNetworkBuilder: INeuralNetworkBuilder<NeuralNetwork>
+	public sealed class NeuralNetworkBuilder: INeuralNetworkBuilder
 	{
 		private const int MinimalLayersCount = 3;
 
-		private readonly INeuronLayerBuilder _neuronLayerBuilder;
+		private readonly INeuralNetworkLayerBuilder _neuronLayerBuilder;
 
-		public NeuralNetworkBuilder(INeuronLayerBuilder neuronLayerBuilder)
+		public NeuralNetworkBuilder(INeuralNetworkLayerBuilder neuronLayerBuilder)
 		{
 			_neuronLayerBuilder = neuronLayerBuilder ?? throw new ArgumentNullException(nameof(neuronLayerBuilder));
 		}
 
-		public NeuralNetwork Build(int[] layerNeuronsCount, IErrorFunction errorFunction)
+		public INeuralNetwork Build(int[] layerNeuronsCount, IActivationFunction activationFunction)
 		{
 			if (layerNeuronsCount == null)
 				throw new ArgumentNullException(nameof(layerNeuronsCount));
-
-			if (errorFunction == null)
-				throw new ArgumentNullException(nameof(errorFunction));
+			if (activationFunction == null)
+				throw new ArgumentNullException(nameof(activationFunction));
 
 			if (layerNeuronsCount.Length < MinimalLayersCount)
 				throw new ArgumentException(
-					$"Neuron layers count can not be less than {MinimalLayersCount}, but found {layerNeuronsCount.Length}.",
+					$"Neural network layers count can not be less than {MinimalLayersCount}, but found {layerNeuronsCount.Length}.",
 					nameof(layerNeuronsCount));
 
-			var layers = new List<NeuronLayer>();
+			var layers = new List<INeuralNetworkLayer>();
+
+			INeuralNetworkLayer previousLayer = null;
 
 			for (var layerNumber = 0; layerNumber < layerNeuronsCount.Length; layerNumber++)
 			{
@@ -39,21 +40,22 @@ namespace Veises.Neural
 				else if (layerNumber == layerNeuronsCount.Length - 1)
 					layerType = NeuronLayerType.Output;
 
-				var layer = _neuronLayerBuilder.Build(layerType, layerNeuronsCount[layerNumber]);
+				var layer = _neuronLayerBuilder.Build(
+					layerType,
+					layerNeuronsCount[layerNumber],
+					activationFunction);
 
 				layers.Add(layer);
 
-				if (layerNumber > 0)
+				if (layerType != NeuronLayerType.Input)
 				{
-					var previousLayer = layers[layerNumber - 1];
-
-					Axon.Create(previousLayer, layer);
+					NeuralNetworkAxon.Create(previousLayer, layer);
 				}
 
-				Debug.WriteLine($"Neuron {layerType} layer {layerNumber + 1} created");
+				previousLayer = layer;
 			}
 
-			return new NeuralNetwork(layers, errorFunction);
+			return new NeuralNetwork(layers, activationFunction);
 		}
 	}
 }

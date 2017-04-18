@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Linq;
 using Veises.Neural.Properties;
 
 namespace Veises.Neural
 {
-	public sealed class NeuralNetworkTrainer: INeuralNetworkTrainer
+	public sealed class GlobalErrorNeuralNetworkTrainer: INeuralNetworkTrainer
 	{
 		private INeuralNetwork _neuralNetwork;
 
@@ -17,11 +16,16 @@ namespace Veises.Neural
 			if (learningCases == null)
 				throw new ArgumentNullException(nameof(learningCases));
 
+			if (_neuralNetwork == null)
+				throw new InvalidOperationException("Neural network is not initialized");
+
 			var iterationCount = 1;
 
-			do
+			while (true)
 			{
 				var requireRepeat = false;
+
+				var globalErrorSum = 0d;
 
 				foreach (var learnCase in learningCases)
 				{
@@ -29,19 +33,12 @@ namespace Veises.Neural
 
 					_neuralNetwork.SetInputs(learnCase.Input);
 
-					var outputs = _neuralNetwork.GetOutputs().ToArray();
+					var globalError = _neuralNetwork.GetGlobalError(learnCase.Expected);
 
-					for (var i = 0; i < learnCase.Expected.Length; i++)
-					{
-						var diff = Math.Abs(learnCase.Expected[i] - outputs[i]);
+					var isValueEaquals = globalError < Settings.Default.LearningTestAcceptance;
 
-						Debug.WriteLine($"Diff: {diff}");
-
-						var isValueEaquals = diff < Settings.Default.LearningTestAcceptance;
-
-						if (isValueEaquals == false)
-							isExpectedEqualsOutput = false;
-					}
+					if (isValueEaquals == false)
+						isExpectedEqualsOutput = false;
 
 					if (!isExpectedEqualsOutput)
 					{
@@ -49,16 +46,20 @@ namespace Veises.Neural
 
 						requireRepeat = true;
 					}
+
+					globalErrorSum += globalError;
 				}
 
 				if (!requireRepeat)
 					break;
 
-				Debug.WriteLine($"Learn iterations total count: {iterationCount}");
+				Debug.WriteLine($"Learn iterations total count: {iterationCount}, global error: {globalErrorSum}");
 
 				iterationCount++;
 
-			} while (true);
+				if (iterationCount > 1000)
+					break;
+			}
 		}
 	}
 }

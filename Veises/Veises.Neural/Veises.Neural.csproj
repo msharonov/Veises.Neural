@@ -43,28 +43,30 @@
     <Compile Include="..\AssemblyInfoGlobal.cs">
       <Link>Properties\AssemblyInfoGlobal.cs</Link>
     </Compile>
-    <Compile Include="Axon.cs" />
     <Compile Include="Bias.cs" />
+    <Compile Include="BipolarSigmoidActivationFunction.cs" />
     <Compile Include="DeltaFunction.cs" />
     <Compile Include="ErrorSsignalFunction.cs" />
-    <Compile Include="GlobalErrorFunction.cs" />
+    <Compile Include="GlobalErrorNeuralNetworkTrainer.cs" />
     <Compile Include="IActivationFunction.cs" />
     <Compile Include="IErrorFunction.cs" />
     <Compile Include="INeuralNetwork.cs" />
+    <Compile Include="INeuralNetworkAxon.cs" />
     <Compile Include="INeuralNetworkBuilder.cs" />
+    <Compile Include="INeuralNetworkLayer.cs" />
+    <Compile Include="INeuralNetworkLayerBuilder.cs" />
+    <Compile Include="INeuralNetworkNexon.cs" />
     <Compile Include="INeuralNetworkTrainer.cs" />
-    <Compile Include="INeuronBuilder.cs" />
-    <Compile Include="INeuronLayerBuilder.cs" />
+    <Compile Include="NeuralNetworkAxon.cs" />
     <Compile Include="NeuralNetworkBuilder.cs" />
+    <Compile Include="NeuralNetworkLayer.cs" />
+    <Compile Include="NeuralNetworkLayerBuilder.cs" />
+    <Compile Include="NeuralNetworkNeuron.cs" />
     <Compile Include="NeuralNetworkTrainer.cs" />
-    <Compile Include="NeuronBuilder.cs" />
-    <Compile Include="NeuronLayerBuilder.cs" />
     <Compile Include="Perceptron\BinaryPerceptron.cs" />
     <Compile Include="Perceptron\IPerceptronInput.cs" />
     <Compile Include="NetworkLearnCase.cs" />
     <Compile Include="NeuralNetwork.cs" />
-    <Compile Include="Neuron.cs" />
-    <Compile Include="NeuronLayer.cs" />
     <Compile Include="NeuronLayerType.cs" />
     <Compile Include="Perceptron\PerceptronBiasInput.cs" />
     <Compile Include="Perceptron\PerceptronInput.cs" />
@@ -75,8 +77,7 @@
       <DependentUpon>Settings.settings</DependentUpon>
     </Compile>
     <Compile Include="SigmoidFunction.cs" />
-    <Compile Include="StepFunction.cs" />
-    <Compile Include="SymmetricalSigmoidFunction.cs" />
+    <Compile Include="SummerSquaredErrorFunction.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
