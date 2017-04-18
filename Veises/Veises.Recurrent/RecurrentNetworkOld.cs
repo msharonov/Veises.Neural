@@ -109,32 +109,6 @@ namespace Veises.Recurrent
 					chWeights[c][j] = weights[p++];
 		}
 
-		public double[] GetWeights()
-		{
-			var numWeights = (numInput * numHidden) +
-			  (numHidden * numOutput) +
-			  (numHidden * numHidden) + numHidden + numOutput;
-
-			var result = new double[numWeights];
-
-			var k = 0;
-
-			for (var i = 0; i < ihWeights.Length; ++i)
-				for (var j = 0; j < ihWeights[0].Length; ++j)
-					result[k++] = ihWeights[i][j];
-
-			for (var i = 0; i < hBiases.Length; ++i)
-				result[k++] = hBiases[i];
-
-			for (var i = 0; i < hoWeights.Length; ++i)
-				for (var j = 0; j < hoWeights[0].Length; ++j)
-					result[k++] = hoWeights[i][j];
-
-			for (var i = 0; i < oBiases.Length; ++i)
-				result[k++] = oBiases[i];
-			return result;
-		}
-
 		public void SetContext(double[] values)
 		{
 			if (values.Length != numHidden)

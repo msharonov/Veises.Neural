@@ -26,6 +26,8 @@ namespace Veises.Recurrent
 			_layerContextAxons = BuildAxonsForLayerContextNeurons(layerContextNeurons);
 
 			_outputContextAxon = new NeuralnetworkStaticAxon(this, outputContextNeuron);
+
+			Output = 0.5d;
 		}
 
 		private IReadOnlyCollection<INeuralNetworkAxon> BuildAxonsForLayerContextNeurons(
