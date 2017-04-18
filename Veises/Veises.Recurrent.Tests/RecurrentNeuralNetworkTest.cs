@@ -26,9 +26,9 @@ namespace Veises.Recurrent.Tests
 		{
 			var testInput = new[]
 {
-				1d + step,
-				2d + step,
-				3d + step
+				0.1d + step * 0.1d,
+				0.2d + step * 0.1d,
+				0.3d + step * 0.1d
 			};
 
 			var desiredOutput = testInput
@@ -50,11 +50,13 @@ namespace Veises.Recurrent.Tests
 				GetLearnCase(2d),
 				GetLearnCase(3d));
 
+			var output = _recurrentNetwork.GetOutputs();
+
 			var validationInput = new[]
 			{
-				7d,
-				8d,
-				9d
+				0.7d,
+				0.8d,
+				0.9d
 			};
 
 			_recurrentNetwork.SetInputs(validationInput);
