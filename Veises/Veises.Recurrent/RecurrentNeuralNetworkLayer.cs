@@ -67,7 +67,7 @@ namespace Veises.Recurrent
 			if (LayerType != NeuronLayerType.Output)
 				return outputs;
 
-			return outputs; // Softmax(outputs);
+			return Softmax(outputs);
 		}
 
 		private static IEnumerable<double> Softmax(IEnumerable<double> inputValues)

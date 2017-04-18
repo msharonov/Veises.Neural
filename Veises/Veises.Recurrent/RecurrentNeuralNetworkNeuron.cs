@@ -45,7 +45,10 @@ namespace Veises.Recurrent
 
 		public override void CalculateOutput()
 		{
-			var inputSum = _inputAxons.Sum(_ => _.GetOutput());
+			var inputAxons = _inputAxons
+				.Where(axon => !_layerContextAxons.Contains(axon));
+
+			var inputSum = inputAxons.Sum(_ => _.GetOutput());
 
 			var contextInputSum = _layerContextAxons.Sum(_ => _.GetOutput());
 
