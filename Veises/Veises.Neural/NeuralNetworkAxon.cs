@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using Veises.Neural.Properties;
 
 namespace Veises.Neural
@@ -45,6 +46,11 @@ namespace Veises.Neural
 			}
 
 			Weight -= _delta;
+
+			if (Math.Abs(Weight) > 1d)
+			{
+				Debug.WriteLine($"Axon with weight {Weight} is overlearned");
+			}
 		}
 
 		public static INeuralNetworkAxon Create(INeuralNetworkNeuron input, INeuralNetworkNeuron output)

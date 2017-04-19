@@ -10,7 +10,7 @@ namespace Veises.Neural
 
 		double GetGlobalError(params double[] desiredOutputs);
 
-		IEnumerable<double> GetOutputs();
+		IReadOnlyCollection<double> GetOutputs();
 
 		void SetInputs(params double[] inputValues);
 	}

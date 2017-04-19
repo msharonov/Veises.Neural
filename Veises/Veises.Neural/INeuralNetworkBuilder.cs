@@ -2,6 +2,8 @@
 {
 	public interface INeuralNetworkBuilder
 	{
-		INeuralNetwork Build(int[] layerNeuronsCount, IActivationFunction activationFunction);
+		INeuralNetwork Build(
+			IActivationFunction activationFunction,
+			params int[] layerNeuronsCount);
 	}
 }

@@ -10,12 +10,12 @@ namespace Veises.Neural
 
 		void CalculateOutputs();
 
-		IEnumerable<double> GetOutputs();
+		IReadOnlyCollection<double> GetOutputs();
 
-		IEnumerable<INeuralNetworkNeuron> GetNeurons();
+		IReadOnlyCollection<INeuralNetworkNeuron> GetNeurons();
 
-		void InitializeErrors(params double[] desiredOutput);
+		void InitializeErrors(IReadOnlyCollection<double> desiredOutput);
 
-		void SetInputs(double[] inputs);
+		void SetInputs(IReadOnlyCollection<double> inputs);
 	}
 }

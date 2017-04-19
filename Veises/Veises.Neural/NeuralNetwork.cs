@@ -22,7 +22,7 @@ namespace Veises.Neural
 		public void SetInputs(params double[] inputValues) =>
 			NeuronLayers.First().SetInputs(inputValues);
 
-		public IEnumerable<double> GetOutputs()
+		public IReadOnlyCollection<double> GetOutputs()
 		{
 			foreach (var layer in NeuronLayers.Skip(1))
 			{
@@ -43,7 +43,7 @@ namespace Veises.Neural
 
 			for (var i = 0; i < desiredOutputs.Length; i++)
 			{
-				sum += Math.Pow(desiredOutputs[i] - outputs[i], 2d);
+				sum += Math.Pow(outputs[i] - desiredOutputs[i], 2d);
 			}
 
 			var globalError = 0.5d * sum;

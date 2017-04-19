@@ -13,7 +13,7 @@ namespace Veises.Recurrent
 			NeuronLayerType layerType,
 			IReadOnlyCollection<INeuralNetworkNeuron> layerNeurons,
 			IReadOnlyCollection<INeuralNetworkNeuron> contextNeurons,
-			Bias bias)
+			NeuralNetworkBias bias)
 			: base(layerType, layerNeurons, bias)
 		{
 			_contextNeurons = contextNeurons ?? throw new ArgumentNullException(nameof(contextNeurons));
@@ -60,14 +60,14 @@ namespace Veises.Recurrent
 			}
 		}
 
-		public override IEnumerable<double> GetOutputs()
+		public override IReadOnlyCollection<double> GetOutputs()
 		{
 			var outputs = base.GetOutputs();
 
 			if (LayerType != NeuronLayerType.Output)
 				return outputs;
 
-			return Softmax(outputs);
+			return Softmax(outputs).ToList();
 		}
 
 		private static IEnumerable<double> Softmax(IEnumerable<double> inputValues)

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Veises.Neural;
@@ -22,7 +21,10 @@ namespace Veises.Recurrent
 				.Select(_ => new NeuralNetworkNeuron(activationFunction, null))
 				.ToList();
 
-			var layerBias = new Bias();
+			NeuralNetworkBias layerBias = null;
+
+			if (layerType != NeuronLayerType.Input)
+				layerBias = new NeuralNetworkBias();
 
 			var layerNeurons = Enumerable.Range(0, neuronsCount)
 				.Select(_ => new RecurrentNeuralNetworkNeuron(

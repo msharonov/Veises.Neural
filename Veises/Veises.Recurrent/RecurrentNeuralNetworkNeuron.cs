@@ -15,7 +15,7 @@ namespace Veises.Recurrent
 			IReadOnlyCollection<INeuralNetworkNeuron> layerContextNeurons,
 			INeuralNetworkNeuron outputContextNeuron,
 			IActivationFunction activationFunction,
-			Bias bias)
+			NeuralNetworkBias bias)
 			: base(activationFunction, bias)
 		{
 			if (layerContextNeurons == null)
@@ -53,8 +53,6 @@ namespace Veises.Recurrent
 			var contextInputSum = _layerContextAxons.Sum(_ => _.GetOutput());
 
 			inputSum += contextInputSum;
-
-			inputSum += _bias.Weight;
 
 			Output = _activationFunction.Activate(inputSum);
 		}

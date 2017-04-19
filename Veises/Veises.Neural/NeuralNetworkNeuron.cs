@@ -13,21 +13,23 @@ namespace Veises.Neural
 
 		protected readonly IList<INeuralNetworkAxon> _inputAxons;
 
-		protected readonly Bias _bias;
-
 		public double Error { get; protected set; }
 
 		public double Output { get; protected set; }
 
 		public NeuralNetworkNeuron(
 			IActivationFunction activationFunction,
-			Bias bias)
+			NeuralNetworkBias biasNeuron)
 		{
 			_activationFunction = activationFunction ?? throw new ArgumentNullException(nameof(activationFunction));
-			_bias = bias;
 
 			_outputAxons = new List<INeuralNetworkAxon>();
 			_inputAxons = new List<INeuralNetworkAxon>();
+
+			if (biasNeuron != null)
+			{
+				NeuralNetworkAxon.Create(biasNeuron, this);
+			}
 
 			Debug.WriteLine($"Neural network neuron with type {GetType().Name} was created");
 		}
@@ -56,9 +58,6 @@ namespace Veises.Neural
 			{
 				inputSum += axon.GetOutput();
 			}
-
-			if (_bias != null)
-				inputSum += _bias.Weight;
 
 			Output = _activationFunction.Activate(inputSum);
 		}

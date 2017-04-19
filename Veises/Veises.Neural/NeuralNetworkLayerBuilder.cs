@@ -19,11 +19,15 @@ namespace Veises.Neural
 			if (neuronsCount < LayerMinimalNeuronsCount)
 				throw new ArgumentException($"Layer neurons count can not be less than {LayerMinimalNeuronsCount}.");
 
-			var layerBias = new Bias();
+			NeuralNetworkBias layerBias = null;
+
+			if (layerType != NeuronLayerType.Input)
+				layerBias = new NeuralNetworkBias();
 
 			var neurons = Enumerable
 				.Range(0, neuronsCount)
-				.Select(_ => new NeuralNetworkNeuron(activationFunction, layerBias));
+				.Select(_ => new NeuralNetworkNeuron(activationFunction, layerBias))
+				.ToList();
 
 			var layer = new NeuralNetworkLayer(layerType, neurons, layerBias);
 

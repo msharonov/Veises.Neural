@@ -20,7 +20,9 @@ namespace Veises.Recurrent
 			_recurrentLayerBuilder = recurrentLayerBuilder ?? throw new ArgumentNullException(nameof(layerBuilder));
 		}
 
-		public INeuralNetwork Build(int[] layerNeuronsCount, IActivationFunction activationFunction)
+		public INeuralNetwork Build(
+			IActivationFunction activationFunction,
+			params int[] layerNeuronsCount)
 		{
 			if (layerNeuronsCount == null)
 				throw new ArgumentNullException(nameof(layerNeuronsCount));

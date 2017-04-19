@@ -7,21 +7,25 @@ namespace Veises.Neural
 {
 	public class NeuralNetworkLayer: INeuralNetworkLayer
 	{
-		protected readonly IList<INeuralNetworkNeuron> Neurons;
+		protected readonly IReadOnlyCollection<INeuralNetworkNeuron> Neurons;
 
-		private readonly Bias _bias;
+		private readonly INeuralNetworkNeuron _biasNeuron;
 
 		public readonly NeuronLayerType LayerType;
 
 		public NeuralNetworkLayer(
 			NeuronLayerType layerType,
-			IEnumerable<INeuralNetworkNeuron> neurons,
-			Bias bias)
+			IReadOnlyCollection<INeuralNetworkNeuron> neurons,
+			INeuralNetworkNeuron biasNeuron)
 		{
 			if (neurons == null)
 				throw new ArgumentNullException(nameof(neurons));
 
-			_bias = bias ?? throw new ArgumentNullException(nameof(bias));
+			if (layerType == NeuronLayerType.Input &&
+				_biasNeuron != null)
+				throw new InvalidOperationException("Input layer can not have bias");
+
+			_biasNeuron = biasNeuron;
 
 			Neurons = neurons.ToList();
 			LayerType = layerType;
@@ -31,13 +35,16 @@ namespace Veises.Neural
 
 		public virtual void AdjustWeights()
 		{
+			if (_biasNeuron != null)
+				_biasNeuron.AdjustWeights();
+
 			foreach (var neuron in Neurons)
 			{
 				neuron.AdjustWeights();
 			}
 		}
 
-		public void InitializeErrors(double [] desiredOutput)
+		public void InitializeErrors(IReadOnlyCollection<double> desiredOutput)
 		{
 			if (desiredOutput == null)
 				throw new ArgumentNullException(nameof(desiredOutput));
@@ -45,9 +52,12 @@ namespace Veises.Neural
 			if (LayerType != NeuronLayerType.Output)
 				throw new ApplicationException("Errors can't be initialized for non-output layers");
 
-			for (var i = 0; i <Neurons.Count; i++)
+			var desiedOuputEnumerator = desiredOutput.GetEnumerator();
+
+			foreach (var neuron in Neurons)
 			{
-				Neurons[i].BackpropagateError(desiredOutput[i]);
+				if (desiedOuputEnumerator.MoveNext())
+					neuron.BackpropagateError(desiedOuputEnumerator.Current);
 			}
 		}
 
@@ -67,24 +77,29 @@ namespace Veises.Neural
 			}
 		}
 
-		public virtual IEnumerable<double> GetOutputs() =>
-			Neurons.Select(_ => _.Output);
+		public virtual IReadOnlyCollection<double> GetOutputs() =>
+			Neurons
+				.Select(_ => _.Output)
+				.ToList();
 
-		public IEnumerable<INeuralNetworkNeuron> GetNeurons() => Neurons;
+		public IReadOnlyCollection<INeuralNetworkNeuron> GetNeurons() => Neurons;
 
-		public void SetInputs(double[] inputs)
+		public void SetInputs(IReadOnlyCollection<double> inputs)
 		{
 			if (inputs == null)
 				throw new ArgumentNullException(nameof(inputs));
 
-			if (Neurons.Count != inputs.Length)
+			if (Neurons.Count != inputs.Count)
 				throw new ArgumentException("Input neurons count mismatch", nameof(inputs));
 
-			var i = 0;
+			var inputEnumerator = inputs.GetEnumerator();
+
+			inputEnumerator.MoveNext();
 
 			foreach (var neuron in Neurons)
 			{
-				neuron.SetInput(inputs[i++]);
+				if (inputEnumerator.MoveNext())
+					neuron.SetInput(inputEnumerator.Current);
 			}
 		}
 	}

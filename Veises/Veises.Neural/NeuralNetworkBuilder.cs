@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Veises.Neural
 {
@@ -15,7 +14,9 @@ namespace Veises.Neural
 			_neuronLayerBuilder = neuronLayerBuilder ?? throw new ArgumentNullException(nameof(neuronLayerBuilder));
 		}
 
-		public INeuralNetwork Build(int[] layerNeuronsCount, IActivationFunction activationFunction)
+		public INeuralNetwork Build(
+			IActivationFunction activationFunction,
+			params int[] layerNeuronsCount)
 		{
 			if (layerNeuronsCount == null)
 				throw new ArgumentNullException(nameof(layerNeuronsCount));
