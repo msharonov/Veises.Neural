@@ -65,8 +65,7 @@ namespace Veises.Recurrent.Tests
 
 			// --
 
-			var result = _recurrentNetwork
-				.GetOutputs();
+			var result = _recurrentNetwork.GetOutputs();
 
 			// --
 		}

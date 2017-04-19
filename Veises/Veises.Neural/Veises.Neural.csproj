@@ -54,7 +54,7 @@
     <Compile Include="INeuralNetworkBuilder.cs" />
     <Compile Include="INeuralNetworkLayer.cs" />
     <Compile Include="INeuralNetworkLayerBuilder.cs" />
-    <Compile Include="INeuralNetworkNexon.cs" />
+    <Compile Include="INeuralNetworkNeuron.cs" />
     <Compile Include="INeuralNetworkTrainer.cs" />
     <Compile Include="NeuralNetworkAxon.cs" />
     <Compile Include="NeuralNetworkBias.cs" />
