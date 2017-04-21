@@ -20,7 +20,7 @@ namespace Veises.Neural
 		}
 
 		public void SetInputs(params double[] inputValues) =>
-			NeuronLayers.First().SetInputs(inputValues);
+			 NeuronLayers.First().SetInputs(inputValues);
 
 		public IReadOnlyCollection<double> GetOutputs()
 		{
@@ -40,6 +40,9 @@ namespace Veises.Neural
 			var sum = 0d;
 
 			var outputs = GetOutputs().ToArray();
+
+			if (outputs.Length != desiredOutputs.Length)
+				throw new ArgumentException("Desired output values count mismath");
 
 			for (var i = 0; i < desiredOutputs.Length; i++)
 			{

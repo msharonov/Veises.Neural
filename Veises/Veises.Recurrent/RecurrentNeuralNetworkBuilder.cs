@@ -61,7 +61,7 @@ namespace Veises.Recurrent
 
 			var outputLayer = _layerBuilder.Build(
 				NeuronLayerType.Output,
-				layerNeuronsCount[0],
+				layerNeuronsCount[layerNeuronsCount.Length - 1],
 				activationFunction);
 
 			layers.Add(outputLayer);
