@@ -28,7 +28,7 @@ namespace Veises.Neural
 
 			if (biasNeuron != null)
 			{
-				NeuralNetworkAxon.Create(biasNeuron, this);
+				// NeuralNetworkAxon.Create(biasNeuron, this);
 			}
 
 			Debug.WriteLine($"Neural network neuron with type {GetType().Name} was created");
@@ -79,7 +79,7 @@ namespace Veises.Neural
 			if (_outputAxons.Count() > 0)
 				throw new ApplicationException("Can't calculate error for non-output layer neuron");
 
-			Error = (Output - target) * _activationFunction.GetDerivative(Output);
+			Error = (target - Output) * _activationFunction.GetDerivative(Output);
 		}
 
 		/// <summary>

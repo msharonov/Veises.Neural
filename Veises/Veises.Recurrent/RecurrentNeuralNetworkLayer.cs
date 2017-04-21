@@ -50,13 +50,10 @@ namespace Veises.Recurrent
 		{
 			var contextNeuronsEnumerator = _contextNeurons.GetEnumerator();
 
-			contextNeuronsEnumerator.MoveNext();
-
 			foreach (var neuron in Neurons)
 			{
-				contextNeuronsEnumerator.Current.SetInput(neuron.Output);
-
-				contextNeuronsEnumerator.MoveNext();
+				if (contextNeuronsEnumerator.MoveNext())
+					contextNeuronsEnumerator.Current.SetInput(neuron.Output);
 			}
 		}
 

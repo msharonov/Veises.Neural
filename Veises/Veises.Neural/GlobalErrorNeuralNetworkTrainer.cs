@@ -29,16 +29,11 @@ namespace Veises.Neural
 
 				foreach (var learnCase in learningCases)
 				{
-					var isExpectedEqualsOutput = true;
-
 					_neuralNetwork.SetInputs(learnCase.Input);
 
 					var globalError = _neuralNetwork.GetGlobalError(learnCase.Expected);
 
-					var isValueEaquals = globalError < Settings.Default.LearningTestAcceptance;
-
-					if (isValueEaquals == false)
-						isExpectedEqualsOutput = false;
+					var isExpectedEqualsOutput = globalError < Settings.Default.LearningTestAcceptance;
 
 					if (!isExpectedEqualsOutput)
 					{
@@ -50,15 +45,19 @@ namespace Veises.Neural
 					globalErrorSum += globalError;
 				}
 
+				Debug.WriteLine($"Learn iterations total count: {iterationCount}, global error: {globalErrorSum}");
+
 				if (!requireRepeat)
 					break;
-
-				Debug.WriteLine($"Learn iterations total count: {iterationCount}, global error: {globalErrorSum}");
 
 				iterationCount++;
 
 				if (iterationCount > 1000)
+				{
+					Debug.WriteLine("Maximal iterations count exeed. Learning process is stopped");
+
 					break;
+				}
 			}
 		}
 	}

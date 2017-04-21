@@ -26,5 +26,8 @@ namespace Veises.Neural.Perceptron
 
 			Weight += Settings.Default.LearningRate * Bias * error;
 		}
+
+		public void SetInput(double input) =>
+			throw new InvalidOperationException("Bias can't take value");
 	}
 }

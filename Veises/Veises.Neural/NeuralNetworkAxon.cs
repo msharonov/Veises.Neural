@@ -10,7 +10,7 @@ namespace Veises.Neural
 
 		private readonly INeuralNetworkNeuron _outputNeuron;
 
-		public virtual double Weight { get; protected set; } = _random.NextDouble();
+		public virtual double Weight { get; protected set; } = _random.NextDouble() - 0.5d;
 
 		private static readonly Random _random = new Random();
 
@@ -45,7 +45,7 @@ namespace Veises.Neural
 					* _inputNeuron.Output;
 			}
 
-			Weight -= _delta;
+			Weight += _delta;
 
 			if (Math.Abs(Weight) > 1d)
 			{

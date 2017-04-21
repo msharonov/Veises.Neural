@@ -56,8 +56,10 @@ namespace Veises.Neural
 
 			foreach (var neuron in Neurons)
 			{
-				if (desiedOuputEnumerator.MoveNext())
-					neuron.BackpropagateError(desiedOuputEnumerator.Current);
+				if (!desiedOuputEnumerator.MoveNext())
+					throw new InvalidOperationException("Incorrenct number of desired output values");
+
+				neuron.BackpropagateError(desiedOuputEnumerator.Current);
 			}
 		}
 
@@ -93,8 +95,6 @@ namespace Veises.Neural
 				throw new ArgumentException("Input neurons count mismatch", nameof(inputs));
 
 			var inputEnumerator = inputs.GetEnumerator();
-
-			inputEnumerator.MoveNext();
 
 			foreach (var neuron in Neurons)
 			{

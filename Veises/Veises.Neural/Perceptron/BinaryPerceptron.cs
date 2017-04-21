@@ -30,7 +30,7 @@ namespace Veises.Neural.Perceptron
 			IActivationFunction activationFunction,
 			IErrorFunction errorFunction)
 		{
-			if (inputsCount < 1d)
+			if (inputsCount < 1)
 				throw new ArgumentException("Inputs count can't be less than 1");
 
 			if (activationFunction == null)
@@ -126,19 +126,15 @@ namespace Veises.Neural.Perceptron
 
 			var enumerator = inputValues.GetEnumerator();
 
-			enumerator.MoveNext();
-
 			foreach (var input in Inputs)
 			{
-				var perceptronInput = input as PerceptronInput;
-
-				if (perceptronInput == null)
-					throw new ApplicationException("Incorrect data");
-
-				perceptronInput.SetInput(enumerator.Current);
+				if (!(input is PerceptronInput))
+					continue;
 
 				if (!enumerator.MoveNext())
-					break;
+					throw new ArgumentException("Input values number does not match to a total input number");
+
+				input.SetInput(enumerator.Current);
 			}
 		}
 	}

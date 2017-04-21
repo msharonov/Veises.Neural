@@ -5,5 +5,7 @@
 		void AdjustWeight(double localError);
 
 		double CalculateOutput();
+
+		void SetInput(double input);
 	}
 }

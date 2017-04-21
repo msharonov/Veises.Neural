@@ -1,5 +1,4 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using FluentAssertions;
 using System.Linq;
 
@@ -65,7 +64,7 @@ namespace Veises.Neural.Tests
 			var neuralNetworkLayerBuilder = new NeuralNetworkLayerBuilder();
 			var neuralNetworkBuilder = new NeuralNetworkBuilder(neuralNetworkLayerBuilder);
 
-			_target = neuralNetworkBuilder.Build(new SigmoidFunction(), 15, 50, 3);
+			_target = neuralNetworkBuilder.Build(new SigmoidFunction(), 15, 15, 3);
 
 			var networkTrainer = new NeuralNetworkTrainer();
 

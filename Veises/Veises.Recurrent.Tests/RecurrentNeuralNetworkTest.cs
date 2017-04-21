@@ -19,16 +19,14 @@ namespace Veises.Recurrent.Tests
 
 			_recurrentNetwork = neuronNetworkBuilder.Build(
 				new SigmoidFunction(),
-				3, 3, 3);
+				1, 1, 1);
 		}
 
 		private static NetworkLearnCase GetLearnCase(double step)
 		{
 			var testInput = new[]
-{
-				0.1d + step * 0.1d,
-				0.2d + step * 0.1d,
-				0.3d + step * 0.1d
+			{
+				0.1d + step * 0.1d
 			};
 
 			var desiredOutput = testInput
@@ -47,8 +45,7 @@ namespace Veises.Recurrent.Tests
 			networkTrainer.Train(
 				GetLearnCase(0d),
 				GetLearnCase(1d),
-				GetLearnCase(2d),
-				GetLearnCase(3d));
+				GetLearnCase(2d));
 
 			var output = _recurrentNetwork
 				.GetOutputs()
@@ -56,9 +53,7 @@ namespace Veises.Recurrent.Tests
 
 			var validationInput = new[]
 			{
-				0.7d,
-				0.8d,
-				0.9d
+				0.4d
 			};
 
 			_recurrentNetwork.SetInputs(validationInput);

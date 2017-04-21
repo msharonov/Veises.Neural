@@ -51,10 +51,10 @@ namespace Veises.Neural
 					}
 				}
 
+				Debug.WriteLine($"Learn iterations total count: {iterationCount}");
+
 				if (!requireRepeat)
 					break;
-
-				Debug.WriteLine($"Learn iterations total count: {iterationCount}");
 
 				iterationCount++;
 
