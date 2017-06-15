@@ -19,7 +19,7 @@ namespace Veises.Recurrent.Tests
 
 			_recurrentNetwork = neuronNetworkBuilder.Build(
 				new SigmoidFunction(),
-				3, 50, 50, 1);
+				3, 10, 10, 10, 10, 1);
 		}
 
 		private static NetworkLearnCase GetLearnCase(double step)

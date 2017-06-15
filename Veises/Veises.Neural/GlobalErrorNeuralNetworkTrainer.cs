@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using Veises.Neural.Properties;
 
 namespace Veises.Neural
@@ -33,13 +34,20 @@ namespace Veises.Neural
 
 					var globalError = _neuralNetwork.GetGlobalError(learnCase.Expected);
 
-					var isExpectedEqualsOutput = globalError < Settings.Default.LearningTestAcceptance;
+					var output = _neuralNetwork.GetOutputs().ToArray();
 
-					if (!isExpectedEqualsOutput)
+					foreach (var desiredValye in learnCase.Expected)
 					{
-						_neuralNetwork.Learn(learnCase.Expected);
+						var diff = Math.Abs(desiredValye - output[0]);
 
-						requireRepeat = true;
+						var isExpectedEqualsOutput = diff < Settings.Default.LearningTestAcceptance;
+
+						if (!isExpectedEqualsOutput)
+						{
+							_neuralNetwork.Learn(learnCase.Expected);
+
+							requireRepeat = true;
+						}
 					}
 
 					globalErrorSum += globalError;

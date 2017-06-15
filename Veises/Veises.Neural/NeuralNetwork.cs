@@ -46,7 +46,9 @@ namespace Veises.Neural
 
 			for (var i = 0; i < desiredOutputs.Length; i++)
 			{
-				sum += Math.Pow(desiredOutputs[i] - outputs[i], 2d);
+				var diff = desiredOutputs[i] - outputs[i];
+
+				sum += Math.Pow(diff, 2d);
 			}
 
 			var globalError = 0.5d * sum;
